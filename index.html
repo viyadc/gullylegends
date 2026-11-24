@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' file: https://cdnjs.cloudflare.com; style-src 'self' file: 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <title>Gully Legends</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Yatra+One&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<link rel="stylesheet" href="css/main.css">
-<link rel="stylesheet" href="css/phone.css">
+<link rel="stylesheet" href="style-main.css">
+<link rel="stylesheet" href="style-phone.css">
 </head>
 <body>
 <canvas id="view"></canvas>
+<noscript><p style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#fff4e0;font:16px sans-serif">Please turn on JavaScript to play Gully Legends.</p></noscript>
 
 <div id="startScreen" class="overlay">
   <div class="glass card" style="text-align:center">
@@ -22,7 +23,8 @@
     <div class="hindi display">गली लीजेंड्स</div>
     <p class="lead">You are Aarav, called Aru, a young mechanic back in the city of Nayapur to help at the family garage, Udaan Motors. A new building plan could push out the neighbourhood shops. Run errands, ride scooters, meet your neighbours, and help everyone speak up together.</p>
     <p class="lead" style="font-size:13px;opacity:.75">Press Esc or the Menu button at any time for help, controls, levels and the map.</p>
-    <button id="startBtn" class="btn">Start the story</button>
+    <button id="startBtn" class="btn" disabled>Loading the game…</button>
+    <p id="loadHelp" class="lead">If this stays on loading, keep all the files in one folder, check your internet, and open index.html again.</p>
   </div>
 </div>
 
@@ -92,29 +94,29 @@
   </div>
 </div>
 
-<script src="js/00-core.js"></script>
-<script src="js/01-audio.js"></script>
-<script src="js/02-voices.js"></script>
-<script src="js/03-builders.js"></script>
-<script src="js/places/flat.js"></script>
-<script src="js/places/police-station.js"></script>
-<script src="js/places/hospital.js"></script>
-<script src="js/places/ammo-shop.js"></script>
-<script src="js/world/roads.js"></script>
-<script src="js/world/buildings.js"></script>
-<script src="js/world/sky.js"></script>
-<script src="js/world/landmarks.js"></script>
-<script src="js/world/nature.js"></script>
-<script src="js/world-main.js"></script>
-<script src="js/20-people.js"></script>
-<script src="js/21-vehicles.js"></script>
-<script src="js/30-police.js"></script>
-<script src="js/31-levels.js"></script>
-<script src="js/32-shops.js"></script>
-<script src="js/33-cheats.js"></script>
-<script src="js/40-hud.js"></script>
-<script src="js/41-menu.js"></script>
-<script src="js/42-touch.js"></script>
-<script src="js/90-main.js"></script>
+<script src="01-core.js"></script>
+<script src="02-audio.js"></script>
+<script src="03-voices.js"></script>
+<script src="04-builders.js"></script>
+<script src="10-place-flat.js"></script>
+<script src="11-place-police-station.js"></script>
+<script src="12-place-hospital.js"></script>
+<script src="13-place-ammo-shop.js"></script>
+<script src="20-world-roads.js"></script>
+<script src="21-world-buildings.js"></script>
+<script src="22-world-sky.js"></script>
+<script src="23-world-landmarks.js"></script>
+<script src="24-world-nature.js"></script>
+<script src="25-world-main.js"></script>
+<script src="30-people.js"></script>
+<script src="31-vehicles.js"></script>
+<script src="32-police.js"></script>
+<script src="33-levels.js"></script>
+<script src="34-shops.js"></script>
+<script src="35-cheats.js"></script>
+<script src="40-hud.js"></script>
+<script src="41-menu.js"></script>
+<script src="42-touch.js"></script>
+<script src="90-main.js"></script>
 </body>
 </html>

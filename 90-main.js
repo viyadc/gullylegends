@@ -66,5 +66,6 @@ function init(){
   if(location.hash==='#go')setTimeout(()=>$('startBtn').click(),50);
   bindInput();camera.position.set(0,6,76);camTarget.set(0,1,66);camera.lookAt(camTarget);loop();
   $('startBtn').addEventListener('click',()=>{audio.init();$('startScreen').classList.add('hidden');$('hud').classList.remove('hidden');gameOn=true;paused=false;mode='play';money();stars();hp();hudWeapon();startMission(1);if(location.hash==='#go')toast('Welcome back to Nayapur, Aru!')});
+  const sb=$('startBtn');sb.disabled=false;setText(sb,'Start the story');$('loadHelp').classList.add('hidden');
 }
 init();
