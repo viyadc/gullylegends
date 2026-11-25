@@ -21,7 +21,7 @@ function showStep(){const s=state.mission,m=s.m;setText($('mText'),(m.odd?'':'Le
 function begin(m){
   state.mission={m,i:0,t:m.time||Infinity};state.lastId=m.id;closeScreen('board');
   $('tracker').classList.remove('hidden');$('steps').classList.remove('hidden');setText($('mTitle'),m.odd?m.name:'Level '+m.id+' • '+m.name);showStep();
-  setText($('timer'),m.time?fmtTime(m.time):'No rush');setBeam(m.stages[0].p);toast('Mission started: '+m.name+(m.need?'. Take a scooter for this job.':''),3600);
+  setText($('timer'),m.time?fmtTime(m.time):'No rush');setBeam(m.stages[0].p);
 }
 function startMission(id){const m=MISSIONS.find(q=>q.id===id);if(!m||state.mission||state.done.has(id)||state.done.size!==id-1)return;begin(m)}
 function startOdd(){

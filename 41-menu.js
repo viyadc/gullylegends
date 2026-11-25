@@ -9,7 +9,6 @@ const HELP=Object.freeze([
   'You can fight the police, but every officer you hurt makes the police send more help.',
   'To escape: run far away. You lose one star every few seconds while you stay far from the police. Resting at your flat helps too.',
   'If you are caught, you wake up at the police station and lose your bullets. If your health ends, you wake up at the hospital. Either way the mission fails.',
-  'Look around the city. Some people leave notes for those who look carefully.',
   'Once the story is done, take Odd Jobs on the mission board.'
 ]);
 const ACTS=Object.freeze([['act','Interact'],['fire','Attack'],['swap','Switch weapon'],['horn','Horn'],['jobs','Mission board'],['map','City map'],['jump','Jump or brake']]);

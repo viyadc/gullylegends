@@ -27,7 +27,7 @@ function buildGarage(){
 
 }
 function buildMarket(){
-  [[20,9,0xe4452b],[40,9,0xf7b500],[20,-9,0x2f9e44],[40,-9,0x8e44ad],[-6,-15,0xf59e0b]].forEach(q=>{const st=new THREE.Group();block(2.8,.9,1.6,0x7c4a1e,0,.45,0,st);block(3.2,.18,2.2,q[2],0,2.5,0,st);[-1.4,1.4].forEach(a=>cyl(.07,.07,2.5,0x444444,a,1.25,.8,st,6));[0xff8c1a,0xe4452b,0x2f9e44].forEach((c,i)=>block(.5,.35,.5,c,-.9+i*.9,1.05,0,st));st.position.set(q[0],0,q[1]);scene.add(st);addBox(q[0],q[1],3.2,2.2)});
+  [[25,9,0xe4452b],[40,9,0xf7b500],[20,-9,0x2f9e44],[40,-9,0x8e44ad],[-6,-15,0xf59e0b]].forEach(q=>{const st=new THREE.Group();block(2.8,.9,1.6,0x7c4a1e,0,.45,0,st);block(3.2,.18,2.2,q[2],0,2.5,0,st);[-1.4,1.4].forEach(a=>cyl(.07,.07,2.5,0x444444,a,1.25,.8,st,6));[0xff8c1a,0xe4452b,0x2f9e44].forEach((c,i)=>block(.5,.35,.5,c,-.9+i*.9,1.05,0,st));st.position.set(q[0],0,q[1]);scene.add(st);addBox(q[0],q[1],3.2,2.2,'stall')});
   
 
 }
@@ -38,5 +38,5 @@ function buildLamps(){
 }
 function templeCheck(){
   const p=(active?active.mesh:player.mesh).position,inn=Math.abs(p.x)<3.6&&p.z<-52.8&&p.z>-60.2;
-  if(inn!==state.inTemple){state.inTemple=inn;audio.bell();toast(inn?'You entered the temple.':'You left the temple.')}
+  if(inn!==state.inTemple){state.inTemple=inn;audio.bell()}
 }

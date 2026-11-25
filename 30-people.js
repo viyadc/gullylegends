@@ -47,5 +47,12 @@ function updateLife(dt,tm){
   });
   const pp=(active?active.mesh:player.mesh).position;
   chars.forEach(c=>{const dx=pp.x-c.m.position.x,dz=pp.z-c.m.position.z;if(Math.hypot(dx,dz)<9)c.m.rotation.y=Math.atan2(dx,dz);const w=Math.sin(tm*2+c.o)*.08;c.h.aR.rotation.x=w;c.h.aL.rotation.x=-w});
-  cows.forEach(c=>{c.t+=dt;const a=c.t*.15;c.m.position.x=c.home.x+Math.sin(a)*2.2;c.m.position.z=c.home.z+Math.cos(a*.8)*1.6;c.m.rotation.y=Math.atan2(Math.cos(a)*.33,-Math.sin(a*.8)*.13)});
+  cows.forEach(c=>{
+    c.t+=dt;const a=c.t*.15;let tx=c.home.x+Math.sin(a)*2.2,tz=c.home.z+Math.cos(a*.8)*1.6;
+    const dx=tx-pp.x,dz=tz-pp.z,d=Math.hypot(dx,dz);
+    if(d<10&&d>.1){tx+=dx/d*(10-d);tz+=dz/d*(10-d)}
+    const k=Math.min(1,1.5*dt),ex=tx-c.m.position.x,ez=tz-c.m.position.z;
+    c.m.position.x+=ex*k;c.m.position.z+=ez*k;
+    if(Math.hypot(ex,ez)>.08)c.m.rotation.y=Math.atan2(ex,ez);
+  });
 }

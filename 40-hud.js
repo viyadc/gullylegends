@@ -23,7 +23,6 @@ function updateHud(){
   const pr=$('prompt');let msg='';
   const spot=active?null:nearSpot();
   if(active)msg='Get out of the vehicle';
-  else if(nearNote())msg='Read the note';
   else if(nearVehicle())msg='Ride the '+nearVehicle().name;
   else if(spot)msg='Open '+spot.name;
   else if(player.mesh.position.distanceTo(marker.pos)<3.2)msg='Open the mission board';

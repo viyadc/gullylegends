@@ -1,4 +1,37 @@
 'use strict';
+const ROAD_X=[-96,-48,0,48,96],ROAD_Z=[-48,0,96];
+function roadNode(x,z){let b=null,bd=1e9;ROAD_X.forEach((rx,i)=>ROAD_Z.forEach((rz,j)=>{const d=Math.hypot(x-rx,z-rz);if(d<bd){bd=d;b=[i,j]}}));return b}
+function roadPath(a,b){
+  const key=n=>n[0]+','+n[1],prev={},q=[a];prev[key(a)]=null;
+  while(q.length){
+    const n=q.shift();if(n[0]===b[0]&&n[1]===b[1])break;
+    [[1,0],[-1,0],[0,1],[0,-1]].forEach(s=>{const i=n[0]+s[0],j=n[1]+s[1];if(i<0||j<0||i>=ROAD_X.length||j>=ROAD_Z.length||(key([i,j]) in prev))return;prev[key([i,j])]=n;q.push([i,j])});
+  }
+  const out=[];let c=b;while(c){out.unshift(c);c=prev[key(c)]}
+  return out.map(n=>[ROAD_X[n[0]],ROAD_Z[n[1]]]);
+}
+function roadPoint(x,z){
+  let best=null,bd=1e9;
+  ROAD_X.forEach(rx=>{const d=Math.abs(x-rx);if(d<bd){bd=d;best=[rx,clamp(z,-48,136)]}});
+  ROAD_Z.forEach(rz=>{const d=Math.abs(z-rz);if(d<bd){bd=d;best=[clamp(x,-136,136),rz]}});
+  return best;
+}
+function driveJeep(u,tp,d,dt){
+  const m=u.m;u.pt=(u.pt||0)-dt;
+  if(u.pt<=0){
+    u.pt=.6;const rp=roadPoint(tp.x,tp.z),pth=roadPath(roadNode(m.position.x,m.position.z),roadNode(rp[0],rp[1]));
+    if(pth.length>1&&Math.hypot(pth[1][0]-m.position.x,pth[1][1]-m.position.z)<Math.hypot(pth[1][0]-pth[0][0],pth[1][1]-pth[0][1]))pth.shift();
+    u.wp=[...pth,rp];
+  }
+  let wp=null;
+  while(u.wp&&u.wp.length){const q=u.wp[0];if(u.wp.length>1&&Math.hypot(q[0]-m.position.x,q[1]-m.position.z)<7)u.wp.shift();else{wp=q;break}}
+  if(!wp)return;
+  const wx=wp[0]-m.position.x,wz=wp[1]-m.position.z,l=Math.hypot(wx,wz)||1,tx=wp[0]+wz/l*2.8,tz=wp[1]-wx/l*2.8;
+  let df=Math.atan2(tx-m.position.x,tz-m.position.z)-m.rotation.y;df=Math.atan2(Math.sin(df),Math.cos(df));
+  m.rotation.y+=clamp(df,-2.4*dt,2.4*dt);
+  const spd=l<2?0:u.sp*(1-.55*Math.min(1,Math.abs(df)/1.2));
+  m.position.x+=Math.sin(m.rotation.y)*spd*dt;m.position.z+=Math.cos(m.rotation.y)*spd*dt;pushOut(m.position,1.6);
+}
 function minCop(){const tp=(active?active.mesh:player.mesh).position;let d=1e9;units.forEach(u=>{if(!u.dead)d=Math.min(d,Math.hypot(tp.x-u.m.position.x,tp.z-u.m.position.z))});return d}
 function dropUnits(){units.forEach(u=>scene.remove(u.m));units.length=0}
 function giveGun(u){if(u.armed)return;u.armed=true;block(.08,.14,.5,0x111111,0,-.6,.28,u.h.aR);u.h.aR.rotation.x=-1.2}
@@ -11,7 +44,7 @@ function copFoot(armed,lv){
 function copJeep(lv){
   const g=new THREE.Group();block(1.8,.9,3.2,0x1e293b,0,.8,0,g);const r=block(.4,.2,.25,0xef4444,-.35,1.7,-.2,g,{roughness:.3}),b=block(.4,.2,.25,0x3b82f6,.35,1.7,-.2,g,{roughness:.3});
   [-.95,.95].forEach(x=>[-.9,.9].forEach(z=>{const w=cyl(.4,.4,.35,0x0f172a,x,.4,z,g,14);w.rotation.z=Math.PI/2}));
-  const p=spawnAt();g.position.set(p[0]+4,0,p[1]+4);scene.add(g);units.push({k:'jeep',m:g,r,b,armed:true,cd:1.5,sp:lv>3?24:21,t:0,hit:0,lv,hp:130,dead:0});
+  g.position.set(POLICE_R[0],0,0);scene.add(g);units.push({k:'jeep',m:g,r,b,armed:true,cd:1.5,sp:lv>3?24:21,t:0,hit:0,lv,hp:130,dead:0});
 }
 function spawnLevel(lv){
   if(lv===1)copFoot(false,1);
@@ -29,7 +62,7 @@ function setWanted(n){
 }
 function hurt(n){if(state.vest)n=Math.ceil(n/2);state.health-=n;hp();audio.thud();if(state.health<=0)loseTo('You collapsed and woke up at City Hospital. Bill: ₹200.',HOSP_R,200,false)}
 function loseTo(msg,pos,fee,seize){
-  active=null;player.mesh.position.set(pos[0],0,pos[1]);player.mesh.rotation.y=Math.PI;swing(player.h,0,0);
+  active=null;player.mesh.position.set(pos[0],0,pos[1]);player.mesh.rotation.y=Math.PI;player.mesh.rotation.z=0;swing(player.h,0,0);
   state.cash=Math.max(0,state.cash-fee);money();state.health=100;hp();setWanted(0);
   if(seize&&state.ammo>0){state.ammo=0;msg+=' The police took your bullets.'}
   hudWeapon();
@@ -48,7 +81,7 @@ function hudWeapon(){setText($('weap'),state.weapon==='bat'?'🏏 Cricket bat':'
 function swapWeapon(){
   if(paused||active)return;
   state.weapon=state.weapon==='bat'&&state.owned.has('pistol')?'pistol':'bat';
-  equipVisual();hudWeapon();toast(state.weapon==='bat'?'You hold the cricket bat.':'You hold the pistol.');
+  equipVisual();hudWeapon();;
 }
 function hitUnit(u,dmg){u.hp-=dmg;if(u.hp<=0)killUnit(u)}
 function killUnit(u){
@@ -91,7 +124,7 @@ function updatePolice(dt){
       if(d<1.7&&sp<4&&!u.armed){loseTo('The police caught you. Fine: ₹300. You are at the police station.',POLICE_R,300,true);return}
       if(d<1.7&&sp<4&&u.armed){loseTo('The police caught you. Fine: ₹300. You are at the police station.',POLICE_R,300,true);return}
     }else{
-      if(d>3.4){m.position.x+=dx/d*u.sp*dt;m.position.z+=dz/d*u.sp*dt;pushOut(m.position,1.6);m.rotation.y=Math.atan2(dx,dz)}
+      if(d>3.4)driveJeep(u,tp,d,dt);
       else if(sp<5){loseTo('The police jeep stopped you. Fine: ₹300. You are at the police station.',POLICE_R,300,true);return}
       else{u.hit-=dt;if(u.hit<=0){u.hit=1;hurt(8);audio.crash();if(active)active.speed*=.6}}
       u.t+=dt*12;const f=Math.floor(u.t)%2===0;u.r.material.color.setHex(f?0xef4444:0x450a0a);u.b.material.color.setHex(f?0x1e3a8a:0x3b82f6);

@@ -2,8 +2,9 @@
 function mat(c,o){const k=c+(o?JSON.stringify(o):'');return mats[k]||(mats[k]=new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.65},o||{})))}
 function block(w,h,d,c,x,y,z,parent,o){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(c,o));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;(parent||scene).add(m);return m}
 function cyl(rt,rb,h,c,x,y,z,parent,seg){const m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg||14),mat(c));m.position.set(x,y,z);m.castShadow=true;(parent||scene).add(m);return m}
-function addBox(x,z,w,d){boxes.push({x,z,hw:w/2,hd:d/2})}
-function pushOut(p,r){let hit=false;for(const b of boxes){const cx=clamp(p.x,b.x-b.hw,b.x+b.hw),cz=clamp(p.z,b.z-b.hd,b.z+b.hd);let dx=p.x-cx,dz=p.z-cz,d=Math.hypot(dx,dz);if(d<r){if(d<1e-4){dx=1;dz=0;d=1}p.x=cx+dx/d*r;p.z=cz+dz/d*r;hit=true}}return hit}
+let hitBox=null;
+function addBox(x,z,w,d,shop){boxes.push({x,z,hw:w/2,hd:d/2,shop:shop||null})}
+function pushOut(p,r){let hit=false;for(const b of boxes){const cx=clamp(p.x,b.x-b.hw,b.x+b.hw),cz=clamp(p.z,b.z-b.hd,b.z+b.hd);let dx=p.x-cx,dz=p.z-cz,d=Math.hypot(dx,dz);if(d<r){if(d<1e-4){dx=1;dz=0;d=1}p.x=cx+dx/d*r;p.z=cz+dz/d*r;hit=true;hitBox=b}}return hit}
 function onRoad(x,z,m){m=m||0;return Math.abs(x)<6+m||Math.abs(z)<6+m||Math.abs(z+48)<4+m||Math.abs(Math.abs(x)-48)<4+m||Math.abs(Math.abs(x)-96)<7+m||Math.abs(z-96)<4+m}
 function rng(seed){return()=>(seed=(seed*16807)%2147483647)/2147483647}
 
