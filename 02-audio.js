@@ -1,5 +1,5 @@
 'use strict';
-const audio={ctx:null,master:null,on:true,eng:null,rainG:null,sf:false,next:{bell:6,bird:3,step:0,siren:0},
+const audio={ctx:null,master:null,on:true,eng:null,rainG:null,sf:false,next:{bell:6,bird:3,step:0,siren:0,heli:0},
 init(){if(!this.ctx){const A=window.AudioContext||window.webkitAudioContext;if(!A)return;this.ctx=new A();this.master=this.ctx.createGain();this.master.gain.value=this.on?.9:0;this.master.connect(this.ctx.destination);this.ambient()}if(this.ctx.state==='suspended')this.ctx.resume()},
 noise(sec){const c=this.ctx,n=Math.floor(c.sampleRate*sec),b=c.createBuffer(1,n,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;return b},
 ambient(){const c=this.ctx;const crowd=c.createBufferSource(),cf=c.createBiquadFilter(),cg=c.createGain();crowd.buffer=this.noise(2);crowd.loop=true;cf.type='bandpass';cf.frequency.value=420;cg.gain.value=.05;crowd.connect(cf);cf.connect(cg);cg.connect(this.master);crowd.start();

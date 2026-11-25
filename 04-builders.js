@@ -5,7 +5,7 @@ function cyl(rt,rb,h,c,x,y,z,parent,seg){const m=new THREE.Mesh(new THREE.Cylind
 let hitBox=null;
 function addBox(x,z,w,d,shop){boxes.push({x,z,hw:w/2,hd:d/2,shop:shop||null})}
 function pushOut(p,r){let hit=false;for(const b of boxes){const cx=clamp(p.x,b.x-b.hw,b.x+b.hw),cz=clamp(p.z,b.z-b.hd,b.z+b.hd);let dx=p.x-cx,dz=p.z-cz,d=Math.hypot(dx,dz);if(d<r){if(d<1e-4){dx=1;dz=0;d=1}p.x=cx+dx/d*r;p.z=cz+dz/d*r;hit=true;hitBox=b}}return hit}
-function onRoad(x,z,m){m=m||0;return Math.abs(x)<6+m||Math.abs(z)<6+m||Math.abs(z+48)<4+m||Math.abs(Math.abs(x)-48)<4+m||Math.abs(Math.abs(x)-96)<7+m||Math.abs(z-96)<4+m}
+function onRoad(x,z,m){m=m||0;const ax=Math.abs(x);return Math.abs(z)<6+m||Math.abs(z+48)<4+m||Math.abs(z-96)<4+m||Math.abs(z-144)<4+m||Math.abs(z-192)<4+m||[0,48,96,144,192].some(r=>Math.abs(ax-r)<(r===0?6:r===96?7:4)+m)}
 function rng(seed){return()=>(seed=(seed*16807)%2147483647)/2147483647}
 
 function signTex(text,bg,fg,sub){const c=document.createElement('canvas');c.width=512;c.height=128;const g=c.getContext('2d');g.fillStyle=bg;g.fillRect(0,0,512,128);g.lineWidth=8;g.strokeStyle='#f7b500';g.strokeRect(6,6,500,116);g.fillStyle=fg;g.font='bold 40px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(text,256,sub?50:64);if(sub){g.fillStyle='#fff';g.font='italic 20px sans-serif';g.fillText(sub,256,94)}return new THREE.CanvasTexture(c)}

@@ -44,5 +44,5 @@ function updateVehicle(v,dt){
   }
   people.forEach(p=>{if(p.down<=0&&sp>3&&Math.hypot(v.mesh.position.x-p.m.position.x,v.mesh.position.z-p.m.position.z)<v.r+.5){p.down=3;audio.thud();v.speed*=.5;setWanted(state.wanted+1);toast('You hit a pedestrian! Someone called the police.',3600)}});
   if(puddleGroup.visible)PUDDLES.forEach(q=>{if(Math.hypot(v.mesh.position.x-q[0],v.mesh.position.z-q[1])<2.4)v.speed*=Math.max(0,1-2*dt)});
-  v.mesh.position.x=clamp(v.mesh.position.x,-HALF,HALF);v.mesh.position.z=clamp(v.mesh.position.z,NORTH,HALF);
+  bounds(v.mesh.position,0);
 }

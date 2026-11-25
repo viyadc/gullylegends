@@ -1,17 +1,21 @@
 'use strict';
 const HELP=Object.freeze([
   'Move: W A S D or the arrow keys. Drag the screen to turn the camera.',
-  'Use the Interact key to get in or out of a vehicle, shop, rest, pray or read a note.',
+  'Camera view: switch between close view, far view and first person.',
+  'Use the Interact key to get in or out of a vehicle, shop, rest or pray.',
   'The horn works only when you are in a vehicle.',
   'Attack with your weapon. Switch between the cricket bat and the pistol with the switch key. The pistol needs bullets.',
   'Spend money at Udaan Motors, the chai stall, Tara Traders, the temple, the hospital, the ammo shop and your flat.',
-  'Police: hurting a person, or hitting one with a vehicle, brings the police. You can reach five stars. More stars bring armed officers, then jeeps, then special squads.',
+  'Finish story levels to unlock new vehicles, new neighbourhoods and new side jobs. Closed roads show a sign that tells you the level.',
+  'Meet contacts like Raju Bhai, Pappan and Kaveri Didi to take taxi, auto and bus jobs.',
+  'Police: hurting a person, or hitting one with a vehicle, brings the police. You can reach six stars. More stars bring armed officers, jeeps, roadblocks, helicopters and special squads.',
   'You can fight the police, but every officer you hurt makes the police send more help.',
   'To escape: run far away. You lose one star every few seconds while you stay far from the police. Resting at your flat helps too.',
-  'If you are caught, you wake up at the police station and lose your bullets. If your health ends, you wake up at the hospital. Either way the mission fails.',
-  'Once the story is done, take Odd Jobs on the mission board.'
+  'If you are caught, you wake up at the police station and lose your bullets. If your health ends, you wake up at the hospital. A taxi will wait to take you back to your mission.',
+  'The day turns into night, and the weather changes through the day.',
+  'Once the story is done, keep earning with side jobs on the mission board.'
 ]);
-const ACTS=Object.freeze([['act','Interact'],['fire','Attack'],['swap','Switch weapon'],['horn','Horn'],['jobs','Mission board'],['map','City map'],['jump','Jump or brake']]);
+const ACTS=Object.freeze([['act','Interact'],['cam','Camera view'],['fire','Attack'],['swap','Switch weapon'],['horn','Horn'],['jobs','Mission board'],['map','City map'],['jump','Jump or brake']]);
 const TABS=['Levels','Messages','Map','Help','Controls'];
 const keyName=c=>c.replace('Key','').replace('Digit','').replace('Arrow','Arrow ');
 function renderMenu(){

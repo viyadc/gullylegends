@@ -33,10 +33,17 @@ function buildMarket(){
 }
 function buildLamps(){
   const lamps=[[-9,9],[9,-9],[-9,-9],[9,9],[-30,9],[30,-9],[-30,-9],[30,9],[-9,40],[9,-40],[-52,6],[52,-6]];
-  lamps.forEach((l,i)=>{cyl(.12,.15,6,0x334155,l[0],3,l[1],scene,8);const b=new THREE.Mesh(new THREE.SphereGeometry(.35,10,10),new THREE.MeshBasicMaterial({color:0xffe08a}));b.position.set(l[0],6.1,l[1]);scene.add(b);addBox(l[0],l[1],.5,.5);if(i<5){const p=new THREE.PointLight(0xffd27a,.8,18);p.position.set(l[0],5.8,l[1]);scene.add(p)}});
+  lamps.forEach((l,i)=>{cyl(.12,.15,6,0x334155,l[0],3,l[1],scene,8);const b=new THREE.Mesh(new THREE.SphereGeometry(.35,10,10),new THREE.MeshBasicMaterial({color:0xffe08a}));b.position.set(l[0],6.1,l[1]);scene.add(b);addBox(l[0],l[1],.5,.5);if(i<5){const p=new THREE.PointLight(0xffd27a,.8,18);p.position.set(l[0],5.8,l[1]);scene.add(p);lampLights.push(p)}});
 
 }
 function templeCheck(){
   const p=(active?active.mesh:player.mesh).position,inn=Math.abs(p.x)<3.6&&p.z<-52.8&&p.z>-60.2;
   if(inn!==state.inTemple){state.inTemple=inn;audio.bell()}
+}
+function buildFarLamps(){
+  for(let x=-216;x<=216;x+=36)for(const z of [-9,9]){
+    if(Math.abs(x)<60)continue;
+    cyl(.12,.15,6,0x334155,x,3,z,scene,8);
+    const b=new THREE.Mesh(new THREE.SphereGeometry(.35,10,10),new THREE.MeshBasicMaterial({color:0xffe08a}));b.position.set(x,6.1,z);scene.add(b);
+  }
 }

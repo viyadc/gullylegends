@@ -14,8 +14,9 @@ function interact(){
   if(paused)return;
   if(active){const r=active.mesh.rotation.y,p=active.mesh.position;player.mesh.position.set(p.x+Math.cos(r)*2.2,0,p.z-Math.sin(r)*2.2);pushOut(player.mesh.position,.5);swing(player.h,0,0);active.speed=0;active=null;player.mesh.rotation.z=0;return}
   const v=nearVehicle(),sp=nearSpot();
+  if(v&&v.rescue&&state.retry){startRide(v);return}
   if(sp&&!(v&&player.mesh.position.distanceTo(v.mesh.position)<2.8)){state.spot=sp;renderShop();openScreen('shopScreen');return}
-  if(v)active=v;
+  if(v){if(vehLocked(v)){toast('The '+v.name+' unlocks after Level '+VEH_UNLOCK[v.kind]+'.');return}active=v}
 }
 function renderShop(){
   const sp=state.spot;setText($('shopTitle'),sp.name);setText($('shopCash'),'You have ₹'+state.cash.toLocaleString('en-IN'));

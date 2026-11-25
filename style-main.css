@@ -69,3 +69,6 @@ kbd{font-family:inherit;font-weight:700;background:var(--marigold);color:var(--i
 .tbtn{display:none}
 #loadHelp{opacity:0;font-size:12px;margin:12px 0 0;animation:showHelp 0s 6s forwards}
 @keyframes showHelp{to{opacity:.85}}
+#fade{position:fixed;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity .45s;z-index:50}
+#fade.on{opacity:1}
+#timeTag{color:#cfe6ff;font-size:11px;font-weight:700}

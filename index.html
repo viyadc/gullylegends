@@ -14,6 +14,7 @@
 </head>
 <body>
 <canvas id="view"></canvas>
+<div id="fade"></div>
 <noscript><p style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#fff4e0;font:16px sans-serif">Please turn on JavaScript to play Gully Legends.</p></noscript>
 
 <div id="startScreen" class="overlay">
@@ -64,8 +65,8 @@
 <div id="hud" class="hidden">
   <div class="top">
     <div class="col">
-      <div class="glass chip"><span class="display" style="font-size:17px">Nayapur</span><small id="progress">0 / 8 DONE</small></div>
-      <div class="row2"><button id="menuBtn" class="glass chip hudbtn">☰ Menu</button><button id="tbJobs" class="glass chip hudbtn tbtn">Jobs</button><button id="tbMap" class="glass chip hudbtn tbtn">Map</button></div>
+      <div class="glass chip"><span class="display" style="font-size:17px">Nayapur</span><small id="progress">0 / 12 DONE</small><small id="timeTag"></small></div>
+      <div class="row2"><button id="menuBtn" class="glass chip hudbtn">☰ Menu</button><button id="tbJobs" class="glass chip hudbtn tbtn">Jobs</button><button id="tbMap" class="glass chip hudbtn tbtn">Map</button><button id="tbView" class="glass chip hudbtn tbtn">View</button></div>
       <div id="tracker" class="glass hidden">
         <div class="row"><span id="mTitle">Mission</span><span id="timer">00:00</span></div>
       </div>
@@ -75,7 +76,7 @@
       <div id="cash" class="display">₹0</div>
       <div id="hp"><div id="hpBar"></div></div>
       <div id="weap" class="glass chip" style="padding:5px 12px;font-size:12px">🏏 Cricket bat</div>
-      <div class="stars" id="stars"><b>WANTED</b><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <div class="stars" id="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
     </div>
   </div>
   <div id="steps" class="hidden"><span id="mText"></span></div>
@@ -114,6 +115,9 @@
 <script src="33-levels.js"></script>
 <script src="34-shops.js"></script>
 <script src="35-cheats.js"></script>
+<script src="36-time-weather.js"></script>
+<script src="37-zones.js"></script>
+<script src="38-jobs.js"></script>
 <script src="40-hud.js"></script>
 <script src="41-menu.js"></script>
 <script src="42-touch.js"></script>

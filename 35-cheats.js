@@ -2,7 +2,7 @@ const CODES=Object.freeze({
   RUPAYAN:()=>{state.cash+=5000;money();toast('The cash box opened! ₹5,000 is yours.',4200)},
   PAANI:()=>{heal(100);state.vest=true;toast('You feel fresh as water. Health is full and you got a vest.',4200)},
   TOPI:()=>{setWanted(0);toast('The officers tipped their caps and walked away.',4200)},
-  BUS108:()=>{const r=player.mesh.position;makeVehicle('bus',r.x+7,r.z,Math.PI/2);toast('Dev sent his bus for you!',4200)}
+  BUS108:()=>{const r=player.mesh.position;makeVehicle('bus',r.x+7,r.z,Math.PI/2).free=true;toast('Dev sent his bus for you!',4200)}
 });
 const CODE_LIST=Object.keys(CODES);
 function cheatKey(c){
