@@ -43,6 +43,6 @@ function updateVehicle(v,dt){
     if(b&&b.shop&&sp>6){const fee=b.shop==='stall'?40:100,who=b.shop==='stall'?'a stall':b.shop;state.cash=Math.max(0,state.cash-fee);money();toast('You damaged '+who+'. You paid ₹'+fee+' to the owner.',3600)}
   }
   people.forEach(p=>{if(p.down<=0&&sp>3&&Math.hypot(v.mesh.position.x-p.m.position.x,v.mesh.position.z-p.m.position.z)<v.r+.5){p.down=3;audio.thud();v.speed*=.5;setWanted(state.wanted+1);toast('You hit a pedestrian! Someone called the police.',3600)}});
-  if(puddleGroup.visible)PUDDLES.forEach(q=>{if(Math.hypot(v.mesh.position.x-q[0],v.mesh.position.z-q[1])<2.4)v.speed*=Math.max(0,1-2*dt)});
+  if(puddleGroup.visible)PUDDLES.forEach(q=>{if(Math.hypot(v.mesh.position.x-q[0],v.mesh.position.z-q[1])<2.4)v.speed*=Math.max(0,1-1.1*dt)});
   bounds(v.mesh.position,0);
 }

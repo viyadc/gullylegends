@@ -26,7 +26,7 @@ function updateHud(){
   setText($('vName'),(active?active.name:'On foot')+' • '+VIEWS[state.cam]);setText($('vSpeed'),String(Math.round(sp*3)));
   const pr=$('prompt');let msg='';
   const spot=active?null:nearSpot();
-  if(active)msg='Get out of the vehicle';
+  if(active)msg='';
   else if(nearVehicle()){const nv=nearVehicle();msg=nv.rescue&&state.retry?'Take the taxi back to your mission':vehLocked(nv)?'Locked until Level '+VEH_UNLOCK[nv.kind]:'Ride the '+nv.name}
   else if(spot)msg='Open '+spot.name;
   else if(player.mesh.position.distanceTo(marker.pos)<3.2)msg='Open the mission board';

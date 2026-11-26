@@ -38,7 +38,7 @@ function updatePlayer(dt){
   if(d.lengthSq()>0){d.normalize().applyAxisAngle(V3(0,1,0),camY);player.mesh.rotation.y=Math.atan2(d.x,d.z);player.mesh.position.x+=d.x*6.5*dt;player.mesh.position.z+=d.z*6.5*dt;player.ph+=dt*9;swing(player.h,Math.sin(player.ph),.7);audio.next.step-=dt;if(audio.next.step<=0&&player.ground){audio.step();audio.next.step=.36}}else{swing(player.h,0,0)}
   if(keys.space&&player.ground){player.vy=7.5;player.ground=false}
   player.vy-=22*dt;player.mesh.position.y+=player.vy*dt;if(player.mesh.position.y<=0){player.mesh.position.y=0;player.vy=0;player.ground=true}
-  player.h.aR.rotation.x=-.7-player.atk*5;
+  if(state.weapon==='pistol')player.h.aR.rotation.x=-.7-player.atk*5;else if(player.atk>0)player.h.aR.rotation.x=-player.atk*9;
   pushOut(player.mesh.position,.6);
   bounds(player.mesh.position,2);
 }

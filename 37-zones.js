@@ -1,6 +1,8 @@
 const ZONES=Object.freeze({east:{name:'Rajmahal Heights',need:3},west:{name:'Purani Basti',need:6},south:{name:'Khet Edge Farms',need:9}});
 const VEH_UNLOCK=Object.freeze({auto:0,scooter:0,taxi:2,car:3,bike:6,bus:8});
-const NEED_NAME=Object.freeze({scooter:'scooter',taxi:'taxi',auto:'auto',bus:'city bus'});
+const NEED_NAME=Object.freeze({scooter:'scooter or bike',taxi:'taxi',auto:'auto',bus:'city bus'});
+const NEED_KINDS=Object.freeze({scooter:['scooter','bike'],taxi:['taxi'],auto:['auto'],bus:['bus']});
+function needOk(m){return !m.need||!!(active&&NEED_KINDS[m.need].includes(active.kind))}
 const UNLOCK_TEXT=Object.freeze({
   2:'The taxi is unlocked. Raju Bhai has taxi fares.',
   3:'Rajmahal Heights is open, and the hatchback car is unlocked.',

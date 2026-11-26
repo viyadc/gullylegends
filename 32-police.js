@@ -159,12 +159,12 @@ function tracer(a,b,ay){
 }
 function equipVisual(){
   const aR=player.h.aR;if(player.wm){aR.remove(player.wm);player.wm=null}
-  player.wm=state.weapon==='pistol'?block(.08,.14,.4,0x111111,0,-.62,.25,aR):block(.1,.1,.9,0x8b5a2b,0,-.55,.35,aR);
+  player.wm=state.weapon==='pistol'?block(.08,.14,.4,0x111111,0,-.62,.25,aR):null;
 }
-function hudWeapon(){setText($('weap'),state.weapon==='bat'?'🏏 Cricket bat':'🔫 Pistol • '+state.ammo)}
+function hudWeapon(){setText($('weap'),state.weapon==='fist'?'👊 Fists':'🔫 Pistol • '+state.ammo)}
 function swapWeapon(){
   if(paused||active)return;
-  state.weapon=state.weapon==='bat'&&state.owned.has('pistol')?'pistol':'bat';
+  state.weapon=state.weapon==='fist'&&state.owned.has('pistol')?'pistol':'fist';
   equipVisual();hudWeapon();
 }
 function hitUnit(u,dmg){u.hp-=dmg;if(u.hp<=0)killUnit(u)}
@@ -183,19 +183,19 @@ function playerAttack(){
   if(paused||active||state.atkCd>0)return;
   const pistol=state.weapon==='pistol';
   if(pistol&&state.ammo<=0){toast('Out of bullets. Buy more at the ammo shop.');return}
-  const p=player.mesh.position;let best=null,bd=pistol?38:2.8;
+  const p=player.mesh.position;let best=null,bd=pistol?38:2.6;
   units.forEach(u=>{
     if(u.dead||u.mode!=='active'||(u.k==='heli'&&!pistol))return;
     const d=Math.hypot(u.m.position.x-p.x,u.m.position.z-p.z);if(d<bd){bd=d;best={o:u,m:u.m,c:true}}
   });
   people.forEach(q=>{if(q.down>0)return;const d=Math.hypot(q.m.position.x-p.x,q.m.position.z-p.z);if(d<bd){bd=d;best={o:q,m:q.m,c:false}}});
-  state.atkCd=pistol?.35:.6;player.atk=.25;
+  state.atkCd=pistol?.35:.45;player.atk=.25;
   if(pistol){state.ammo--;hudWeapon();audio.shot()}else audio.burst(.2,.1,1800);
   const fx=Math.sin(player.mesh.rotation.y),fz=Math.cos(player.mesh.rotation.y);
   if(best){
     player.mesh.rotation.y=Math.atan2(best.m.position.x-p.x,best.m.position.z-p.z);
     if(pistol)tracer(p,best.m.position);else audio.thud();
-    if(best.c)hitUnit(best.o,pistol?28:14);else hitPerson(best.o);
+    if(best.c)hitUnit(best.o,pistol?28:10);else hitPerson(best.o);
   }else if(pistol)tracer(p,V3(p.x+fx*20,0,p.z+fz*20));
 }
 function updatePolice(dt){

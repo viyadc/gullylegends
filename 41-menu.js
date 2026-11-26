@@ -4,7 +4,7 @@ const HELP=Object.freeze([
   'Camera view: switch between close view, far view and first person.',
   'Use the Interact key to get in or out of a vehicle, shop, rest or pray.',
   'The horn works only when you are in a vehicle.',
-  'Attack with your weapon. Switch between the cricket bat and the pistol with the switch key. The pistol needs bullets.',
+  'You fight with your fists. Buy a pistol at the ammo shop, then use the switch key to change weapons. The pistol needs bullets.',
   'Spend money at Udaan Motors, the chai stall, Tara Traders, the temple, the hospital, the ammo shop and your flat.',
   'Finish story levels to unlock new vehicles, new neighbourhoods and new side jobs. Closed roads show a sign that tells you the level.',
   'Meet contacts like Raju Bhai, Pappan and Kaveri Didi to take taxi, auto and bus jobs.',

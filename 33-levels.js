@@ -62,8 +62,15 @@ function setBeam(p){
 }
 function fmtTime(s){return '00:'+String(Math.max(0,Math.ceil(s))).padStart(2,'0')}
 function showStep(){const s=state.mission,m=s.m;setText($('mText'),(m.odd?'':'Level '+m.id+' • ')+'Step '+(s.i+1)+' of '+m.stages.length+': '+m.stages[s.i].t)}
+function ensureVehicle(need){
+  if(!need||needOk({need}))return;
+  const kinds=NEED_KINDS[need],p=(active?active.mesh:player.mesh).position;
+  const near=vehicles.find(v=>kinds.includes(v.kind)&&!v.rescue&&Math.hypot(v.mesh.position.x-p.x,v.mesh.position.z-p.z)<18);
+  if(near){near.free=true;return}
+  const v=makeVehicle(kinds[0],p.x+4,p.z+3,0);pushOut(v.mesh.position,v.r);v.free=true;
+}
 function begin(m){
-  state.mission={m,i:0,t:m.time||Infinity};state.lastId=m.id;closeScreen('board');
+  state.mission={m,i:0,t:m.time||Infinity,go:false};state.lastId=m.id;closeScreen('board');ensureVehicle(m.need);
   $('tracker').classList.remove('hidden');$('steps').classList.remove('hidden');setText($('mTitle'),m.odd?m.name:'Level '+m.id+' • '+m.name);showStep();
   setText($('timer'),m.time?fmtTime(m.time):'No rush');setBeam(m.stages[0].p);
 }
@@ -76,9 +83,10 @@ function restartLevel(){
 }
 function updateMission(dt){
   const s=state.mission;if(!s)return;
-  if(s.m.time){s.t-=dt;setText($('timer'),fmtTime(s.t));if(s.t<=0){toast('Time is up! Mission failed. Try again from the Menu or the mission board.',4200);endMission();return}}
+  if(!s.go&&needOk(s.m))s.go=true;
+  if(s.m.time&&s.go){s.t-=dt;setText($('timer'),fmtTime(s.t));if(s.t<=0){toast('Time is up! Mission failed. Try again from the Menu or the mission board.',4200);endMission();return}}
   const st=s.m.stages[s.i];
-  if(s.m.need&&!(active&&active.kind===s.m.need)){setText($('mText'),'Get in the '+NEED_NAME[s.m.need]+' first');return}
+  if(!needOk(s.m)){setText($('mText'),'You need a '+NEED_NAME[s.m.need]+' for this job');return}
   showStep();
   const pos=(active?active.mesh:player.mesh).position;
   if(Math.hypot(pos.x-st.p[0],pos.z-st.p[1])<3.4){
