@@ -1,10 +1,10 @@
 'use strict';
 const HELP=Object.freeze([
-  'Move: W A S D or the arrow keys. Drag the screen to turn the camera.',
+  'Move: W A S D or the arrow keys. Hold Shift to run. Drag the screen to turn the camera.',
   'Camera view: switch between close view, far view and first person.',
   'Use the Interact key to get in or out of a vehicle, shop, rest or pray.',
   'The horn works only when you are in a vehicle.',
-  'You fight with your fists. Buy a pistol at the ammo shop, then use the switch key to change weapons. The pistol needs bullets.',
+  'Fight like a street fighter: press the Attack key (Right Ctrl) to throw jabs, punches, hooks and kicks in a combo. Buy a pistol at the ammo shop, then use the switch key to change weapons.',
   'Spend money at Udaan Motors, the chai stall, Tara Traders, the temple, the hospital, the ammo shop and your flat.',
   'Finish story levels to unlock new vehicles, new neighbourhoods and new side jobs. Closed roads show a sign that tells you the level.',
   'Meet contacts like Raju Bhai, Pappan and Kaveri Didi to take taxi, auto and bus jobs.',
@@ -17,7 +17,7 @@ const HELP=Object.freeze([
 ]);
 const ACTS=Object.freeze([['act','Interact'],['cam','Camera view'],['fire','Attack'],['swap','Switch weapon'],['horn','Horn'],['jobs','Mission board'],['map','City map'],['jump','Jump or brake']]);
 const TABS=['Levels','Messages','Map','Help','Controls'];
-const keyName=c=>c.replace('Key','').replace('Digit','').replace('Arrow','Arrow ');
+const keyName=c=>c.replace('ControlRight','Right Ctrl').replace('ControlLeft','Left Ctrl').replace('Key','').replace('Digit','').replace('Arrow','Arrow ');
 function renderMenu(){
   const t=$('tabs'),p=$('panel');t.replaceChildren();p.replaceChildren();
   TABS.forEach(n=>{const b=document.createElement('button');b.className='tab'+(n===state.tab?' on':'');b.textContent=n;b.addEventListener('click',()=>{if(n==='Map'){closeScreen('menuScreen');openScreen('mapScreen');return}state.tab=n;state.rebind=null;renderMenu()});t.append(b)});

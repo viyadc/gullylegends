@@ -64,7 +64,7 @@ function minCop(){
   units.forEach(u=>{if(u.mode==='active'&&!u.dead)d=Math.min(d,Math.hypot(tp.x-u.m.position.x,tp.z-u.m.position.z))});
   return d;
 }
-function giveGun(u){if(u.armed)return;u.armed=true;block(.08,.14,.5,0x111111,0,-.6,.28,u.h.aR);u.h.aR.rotation.x=-1.2}
+function giveGun(u){if(u.armed)return;u.armed=true;gunMesh(u.h.eR);u.h.aR.rotation.x=-1.45;u.h.eR.rotation.x=-.05}
 function spawnAt(){return[POLICE_R[0]+(Math.random()-.5)*4,POLICE_R[1]+(Math.random()-.5)*4]}
 function copFoot(armed,lv,pos,stat){
   const dark=lv>3,swat=lv>=6,col=swat?0x1f2937:dark?0x2b3a55:0xc8b37a,h=humanoid(col,col,0xa8683a,0x111111);
@@ -158,8 +158,8 @@ function tracer(a,b,ay){
   scene.add(ln);setTimeout(()=>{scene.remove(ln);geo.dispose()},90);
 }
 function equipVisual(){
-  const aR=player.h.aR;if(player.wm){aR.remove(player.wm);player.wm=null}
-  player.wm=state.weapon==='pistol'?block(.08,.14,.4,0x111111,0,-.62,.25,aR):null;
+  const eR=player.h.eR;if(player.wm){eR.remove(player.wm);player.wm=null}
+  player.wm=state.weapon==='pistol'?gunMesh(eR):null;
 }
 function hudWeapon(){setText($('weap'),state.weapon==='fist'?'👊 Fists':'🔫 Pistol • '+state.ammo)}
 function swapWeapon(){
@@ -179,24 +179,28 @@ function hitPerson(q){
   if(q.down>0)return;q.down=4;audio.thud();setWanted(state.wanted+1);
   toast('You hurt a person! Someone called the police.',3600);
 }
+const MOVES=[{k:'jab',dur:.26,dmg:8},{k:'cross',dur:.3,dmg:11},{k:'hook',dur:.34,dmg:13},{k:'kick',dur:.42,dmg:15}];
 function playerAttack(){
   if(paused||active||state.atkCd>0)return;
   const pistol=state.weapon==='pistol';
   if(pistol&&state.ammo<=0){toast('Out of bullets. Buy more at the ammo shop.');return}
-  const p=player.mesh.position;let best=null,bd=pistol?38:2.6;
+  const p=player.mesh.position;let best=null,bd=pistol?38:2.8;
   units.forEach(u=>{
     if(u.dead||u.mode!=='active'||(u.k==='heli'&&!pistol))return;
     const d=Math.hypot(u.m.position.x-p.x,u.m.position.z-p.z);if(d<bd){bd=d;best={o:u,m:u.m,c:true}}
   });
   people.forEach(q=>{if(q.down>0)return;const d=Math.hypot(q.m.position.x-p.x,q.m.position.z-p.z);if(d<bd){bd=d;best={o:q,m:q.m,c:false}}});
-  state.atkCd=pistol?.35:.45;player.atk=.25;
-  if(pistol){state.ammo--;hudWeapon();audio.shot()}else audio.burst(.2,.1,1800);
-  const fx=Math.sin(player.mesh.rotation.y),fz=Math.cos(player.mesh.rotation.y);
-  if(best){
-    player.mesh.rotation.y=Math.atan2(best.m.position.x-p.x,best.m.position.z-p.z);
-    if(pistol)tracer(p,best.m.position);else audio.thud();
-    if(best.c)hitUnit(best.o,pistol?28:10);else hitPerson(best.o);
-  }else if(pistol)tracer(p,V3(p.x+fx*20,0,p.z+fz*20));
+  if(best)player.mesh.rotation.y=Math.atan2(best.m.position.x-p.x,best.m.position.z-p.z);
+  if(pistol){
+    state.atkCd=.35;player.atk=.25;player.fightIdle=0;state.ammo--;hudWeapon();audio.shot();
+    const fx=Math.sin(player.mesh.rotation.y),fz=Math.cos(player.mesh.rotation.y);
+    if(best){tracer(p,best.m.position);if(best.c)hitUnit(best.o,28);else hitPerson(best.o)}
+    else tracer(p,V3(p.x+fx*20,0,p.z+fz*20));
+    return;
+  }
+  if(player.fightIdle>1.3)player.combo=0;
+  const mv=MOVES[player.combo%MOVES.length];player.combo++;player.fightIdle=0;
+  player.move={k:mv.k,dur:mv.dur,dmg:mv.dmg,t:0,hit:false,target:best};state.atkCd=mv.dur*.9;audio.burst(.2,.1,1800);
 }
 function updatePolice(dt){
   for(let i=units.length-1;i>=0;i--){
@@ -215,8 +219,8 @@ function updatePolice(dt){
     const m=u.m,dx=tp.x-m.position.x,dz=tp.z-m.position.z,d=Math.hypot(dx,dz);near=Math.min(near,u.k==='heli'?d+10:d);
     if(u.k==='foot'){
       if(!u.stat&&d>1.4){const k=u.sp*dt/d;m.position.x+=dx*k;m.position.z+=dz*k;pushOut(m.position,.5);u.ph+=dt*8}
-      m.rotation.y=Math.atan2(dx,dz);u.h.lL.rotation.x=Math.sin(u.ph)*.7;u.h.lR.rotation.x=-Math.sin(u.ph)*.7;
-      if(!u.armed){u.h.aL.rotation.x=-Math.sin(u.ph)*.7;u.h.aR.rotation.x=Math.sin(u.ph)*.7}
+      m.rotation.y=Math.atan2(dx,dz);legsWalk(u.h,u.ph,.7);
+      if(!u.armed)armsWalk(u.h,u.ph,.7);
       if(d<1.7&&sp<4){loseTo('The police caught you. Fine: ₹300. You are at the police station.',POLICE_R,300,true);return}
     }else if(u.k==='jeep'){
       if(d>3.4)chaseJeep(u,tp,dt);

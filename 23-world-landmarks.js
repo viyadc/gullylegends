@@ -42,7 +42,7 @@ function templeCheck(){
 }
 function buildFarLamps(){
   for(let x=-216;x<=216;x+=36)for(const z of [-9,9]){
-    if(Math.abs(x)<60)continue;
+    if(Math.abs(x)<60||onRoad(x,z,1.5))continue;
     cyl(.12,.15,6,0x334155,x,3,z,scene,8);
     const b=new THREE.Mesh(new THREE.SphereGeometry(.35,10,10),new THREE.MeshBasicMaterial({color:0xffe08a}));b.position.set(x,6.1,z);scene.add(b);
   }

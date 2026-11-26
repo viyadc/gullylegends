@@ -9,9 +9,9 @@ const SHOPS=Object.freeze([
 const HOMES_BASE=Object.freeze([[24,24,16,3,0x3fbf8f],[-64,24,14,3,0xf0824a],[64,24,14,4,0x7c8ba1],[-24,60,16,3,0xe0a458],[24,60,16,4,0xd9648a],[-64,60,14,3,0x58a6c9],[64,60,14,3,0xb8c35a],[114,-24,18,6,0xb8c0cc],[114,24,18,5,0xc9b8a0],[114,60,18,6,0xa8c0c8],[-114,-24,18,3,0xf06292],[-114,24,18,3,0x4db6ac],[-114,60,18,4,0xffb74d]]);
 const PAL=[0xe86a92,0xf2a93b,0x2fb5a6,0x4c8df6,0x8d6be8,0x3fbf8f,0xf0824a,0xe0a458,0xd9648a,0x58a6c9,0xb8c35a,0x9575cd,0xb8c0cc,0xc9b8a0];
 function genHomes(){
-  const r=rng(31),out=[],add=(x,z,w)=>out.push([x,z,w,3+Math.floor(r()*4),PAL[Math.floor(r()*PAL.length)]]);
+  const r=rng(31),out=[],add=(x,z,w,st)=>out.push([x,z,w,st||3+Math.floor(r()*4),PAL[Math.floor(r()*PAL.length)]]);
   [-24,24,60,120,168,216].forEach(z=>[168,216,-168,-216].forEach(x=>add(x,z,16+Math.floor(r()*3)*2)));
-  [-120,-72,-24,24,72,120].forEach(x=>[168,216].forEach(z=>add(x,z,16)));
+  [-120,-72,-24,24,72,120].forEach(x=>add(x,216,16,1+Math.floor(r()*2)));
   return out;
 }
 const HOMES=Object.freeze([...HOMES_BASE,...genHomes()]);

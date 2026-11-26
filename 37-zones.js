@@ -29,9 +29,9 @@ function buildBarricades(){
       m.position.set(s[0],3.2,s[1]);m.rotation.y=s[2];scene.add(m);barricades[zone].push(m);
     });
   };
-  add('east',139.5,38,200,false,[[139,0,-Math.PI/2],[139,-48,-Math.PI/2],[139,96,-Math.PI/2]]);
-  add('west',-139.5,38,200,false,[[-139,0,Math.PI/2],[-139,-48,Math.PI/2],[-139,96,Math.PI/2]]);
-  add('south',0,139.5,278,true,[[0,139,Math.PI],[-48,139,Math.PI],[48,139,Math.PI],[-96,139,Math.PI],[96,139,Math.PI]]);
+  add('east',139.5,88,300,false,ROAD_Z.map(z=>[139,z,-Math.PI/2]));
+  add('west',-139.5,88,300,false,ROAD_Z.map(z=>[-139,z,Math.PI/2]));
+  add('south',0,139.5,478,true,ROAD_X.map(x=>[x,139,Math.PI]));
 }
 function checkUnlocks(){
   const n=state.done.size;

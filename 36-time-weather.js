@@ -30,7 +30,7 @@ function updateTime(dt){
   const ang=(h-6)/12*Math.PI,up=Math.sin(ang);
   sunL.intensity=Math.max(0,up)*1.4*state.dim;sunL.color.setHex(h<8||h>17?0xffb070:0xfff0d8);
   sunOff.set(Math.cos(ang)*60,Math.max(10,Math.abs(up)*60),-30);
-  lampLights.forEach(p=>{p.intensity=night*1.6});
+  lampLights.forEach(p=>{p.intensity=night*1.6});state.night=night;
   const mm=Math.floor((h-hi)*60),icon=night>.6&&state.wxT==='clear'&&!forced?'🌙':WX_ICON[forced?'rain':state.wxT];
   setText($('timeTag'),icon+' '+String(hi).padStart(2,'0')+':'+String(Math.floor(mm/10)*10).padStart(2,'0'));
 }

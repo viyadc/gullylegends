@@ -12,7 +12,7 @@ function heal(n){state.health=Math.min(100,state.health+n);hp()}
 function nearSpot(){const p=player.mesh.position;return SPOTS.find(q=>Math.hypot(p.x-q.x,p.z-q.z)<3.6)}
 function interact(){
   if(paused)return;
-  if(active){const r=active.mesh.rotation.y,p=active.mesh.position;player.mesh.position.set(p.x+Math.cos(r)*2.2,0,p.z-Math.sin(r)*2.2);pushOut(player.mesh.position,.5);swing(player.h,0,0);active.speed=0;active=null;player.mesh.rotation.z=0;return}
+  if(active){const r=active.mesh.rotation.y,p=active.mesh.position;player.mesh.position.set(p.x+Math.cos(r)*2.2,0,p.z-Math.sin(r)*2.2);pushOut(player.mesh.position,.5);swing(player.h,0,0);player.pose={};active.speed=0;active=null;player.mesh.rotation.z=0;return}
   const v=nearVehicle(),sp=nearSpot();
   if(v&&v.rescue&&state.retry){startRide(v);return}
   if(sp&&!(v&&player.mesh.position.distanceTo(v.mesh.position)<2.8)){state.spot=sp;renderShop();openScreen('shopScreen');return}
@@ -40,7 +40,7 @@ function buy(it){
   else if(it.id==='ammo'){state.ammo=Math.min(99,state.ammo+12);hudWeapon();}
   else if(it.id==='vest'){state.vest=true;}
   else if(it.id==='chai'){heal(25);}
-  else if(it.id==='jacket'){const pl=player.h;[pl.g.children[0],pl.aL.children[0],pl.aR.children[0]].forEach(m=>{m.material=mat(0x2563eb)});}
+  else if(it.id==='jacket'){player.h.cloth.forEach(m=>{m.material=mat(0x2563eb)});}
   else if(it.id==='pray'){heal(40);}
   else if(it.id==='heal'){heal(100);}
   else if(it.id==='rent'){}

@@ -1,8 +1,14 @@
+const spawnFree=(kind,msg)=>{const r=player.mesh.position;makeVehicle(kind,r.x+7,r.z,Math.PI/2).free=true;toast(msg,4200)};
 const CODES=Object.freeze({
   RUPAYAN:()=>{state.cash+=5000;money();toast('The cash box opened! ₹5,000 is yours.',4200)},
   PAANI:()=>{heal(100);state.vest=true;toast('You feel fresh as water. Health is full and you got a vest.',4200)},
   TOPI:()=>{setWanted(0);toast('The officers tipped their caps and walked away.',4200)},
-  BUS108:()=>{const r=player.mesh.position;makeVehicle('bus',r.x+7,r.z,Math.PI/2).free=true;toast('Dev sent his bus for you!',4200)}
+  BUS108:()=>spawnFree('bus','Dev sent his bus for you!'),
+  GAADI:()=>spawnFree('car','A shiny hatchback is parked beside you.'),
+  BULLET:()=>spawnFree('bike','The roadster bike rolls up with a loud thump.'),
+  RICKSHAW:()=>spawnFree('auto','A black and yellow auto is waiting for you.'),
+  KAALIPEELI:()=>spawnFree('taxi','A taxi pulls up beside you.'),
+  ACTIVA:()=>spawnFree('scooter','A scooter is ready for you.')
 });
 const CODE_LIST=Object.keys(CODES);
 function cheatKey(c){
@@ -19,10 +25,14 @@ const STREET_ART=Object.freeze([
   {s:'w',x:24,z:-24,w:16,k:'waves',t:'What flows past the temple? Say it the Hindi way. Five letters, two A letters.'},
   {s:'w',x:80,z:-24,w:14,k:'cap',t:'Officers wear it on their heads. A Hindi word with four letters. It starts with T.'},
   {s:'w',x:80,z:60,w:14,k:'wheels',t:"Dev's favourite bus wears a number on its side. Type BUS and that number."},
-  {s:'e',x:-24,z:-24,w:16,k:'feathers'},{s:'w',x:-24,z:-24,w:16,k:'petals'},{s:'e',x:24,z:-24,w:16,k:'rays'},
-  {s:'w',x:-64,z:-24,w:14,k:'waves'},{s:'e',x:-64,z:-24,w:14,k:'feathers'},{s:'e',x:64,z:-24,w:14,k:'petals'},
-  {s:'w',x:64,z:24,w:14,k:'rays'},{s:'e',x:24,z:60,w:16,k:'feathers'},{s:'w',x:-24,z:60,w:16,k:'waves'},
-  {s:'e',x:-24,z:24,w:16,k:'petals'},{s:'w',x:114,z:24,w:18,k:'feathers'},{s:'e',x:-114,z:60,w:18,k:'rays'}
+  {s:'e',x:24,z:-24,w:16,k:'wheels',t:'A car in Hindi has five letters and two A letters in a row.'},
+  {s:'e',x:24,z:60,w:16,k:'feathers',t:'A loud roadster is nicknamed after a small round shot. Six letters, in English.'},
+  {s:'e',x:64,z:-24,w:14,k:'wheels',t:'Three wheels, black and yellow, and it says tuk tuk. Type its English name.'},
+  {s:'w',x:64,z:24,w:14,k:'rays',t:'Black and yellow in Hindi, as one word. Black is kaali. Yellow is peeli.'},
+  {s:'w',x:-64,z:-24,w:14,k:'rays',t:"Honda's popular gearless scooter. Six letters, and it starts with A."},
+  {s:'e',x:-24,z:-24,w:16,k:'feathers'},{s:'w',x:-24,z:-24,w:16,k:'petals'},
+  {s:'e',x:-64,z:-24,w:14,k:'feathers'},{s:'e',x:-24,z:24,w:16,k:'petals'},
+  {s:'w',x:-24,z:60,w:16,k:'waves'},{s:'w',x:114,z:24,w:18,k:'feathers'},{s:'e',x:-114,z:60,w:18,k:'rays'}
 ]);
 function wrapText(g,text,cx,y,maxW,lh){
   let line='';

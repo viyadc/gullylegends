@@ -21,7 +21,7 @@ function loop(){
   requestAnimationFrame(loop);
   const dt=Math.min(clock.getDelta(),.1),tm=clock.elapsedTime;
   if(gameOn&&!paused&&!document.hidden){
-    state.crashCd-=dt;updatePlayer(dt);if(active)updateVehicle(active,dt);updatePolice(dt);updateMission(dt);updateLife(dt,tm);updateCamera();templeCheck();updateTime(dt);updateRain(dt);audio.setEngine(active?Math.abs(active.speed)/active.max:0,!!active);audio.tick(dt,!!state.mission&&state.mission.m.id===4);
+    state.crashCd-=dt;updatePlayer(dt);if(active)updateVehicle(active,dt);updatePolice(dt);updateMission(dt);updateLife(dt,tm);updateCamera();templeCheck();updateTime(dt);updateRain(dt);vehicles.forEach(v=>updateLights(v,tm));updateHeadlight();audio.setEngine(active?Math.abs(active.speed)/active.max:0,!!active);audio.tick(dt,!!state.mission&&state.mission.m.id===4);
     marker.icon.rotation.y+=dt*2;if(state.beam)state.beam.r.rotation.z+=dt*3;buildWorld.water.position.y=.06+Math.sin(tm)*.03;updateHud();
   }else{audio.setEngine(0,false);audio.setRain(0)}
   renderer.render(scene,camera);
@@ -33,17 +33,18 @@ function bindInput(){
     if(!gameOn)return;audio.init();const c=e.code;
     if(state.rebind){e.preventDefault();const k=state.rebind;state.rebind=null;if(c!=='Escape'&&!Object.values(binds).includes(c)&&!map[c])binds[k]=c;renderMenu();return}
     if(c==='Escape'){if(mode==='play')openScreen('menuScreen');else closeScreen(mode);return}
+    if(c==='ShiftLeft'||c==='ShiftRight'){keys.run=true;return}
     if(mode==='play'&&cheatKey(c)){e.preventDefault();return}
     if(mode==='play'&&(map[c]||c===binds.jump)){keys[map[c]||'space']=true;if(c==='Space'||c.startsWith('Arrow'))e.preventDefault();return}
     if(c===binds.act&&mode==='play')interact();
     else if(c===binds.horn&&mode==='play'&&active)audio.horn();
-    else if(c===binds.fire&&mode==='play')playerAttack();
+    else if(c===binds.fire&&mode==='play'){e.preventDefault();playerAttack()}
     else if(c===binds.swap&&mode==='play')swapWeapon();
     else if(c===binds.jobs)toggleScreen('board');
     else if(c===binds.cam&&mode==='play')state.cam=(state.cam+1)%3;
     else if(c===binds.map)toggleScreen('mapScreen');
   });
-  addEventListener('keyup',e=>{if(map[e.code])keys[map[e.code]]=false;if(e.code===binds.jump)keys.space=false});
+  addEventListener('keyup',e=>{if(map[e.code])keys[map[e.code]]=false;if(e.code===binds.jump)keys.space=false;if(e.code==='ShiftLeft'||e.code==='ShiftRight')keys.run=false});
   addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));
   document.querySelectorAll('[data-key]').forEach(b=>{const k=b.dataset.key;if(!(k in keys))return;const on=e=>{e.preventDefault();if(mode==='play')keys[k]=true},off=e=>{e.preventDefault();keys[k]=false};b.addEventListener('pointerdown',on);['pointerup','pointerleave','pointercancel'].forEach(t=>b.addEventListener(t,off))});
   $('menuBtn').addEventListener('click',()=>{audio.init();if(mode==='play')openScreen('menuScreen')});
