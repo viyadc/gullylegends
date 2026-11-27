@@ -22,10 +22,10 @@ function updateIntro(dt){
   const b=intro.bus,m=b.mesh,p=player.mesh.position;intro.t+=dt;
   if(intro.phase===0){
     const dist=m.position.z-88,spd=Math.max(.5,Math.min(14,Math.sqrt(Math.max(0,6.8*dist))));
-    m.position.z-=spd*dt;spinWheels(b,spd,dt);intro.eng=.15+spd/20;
+    b.speed=spd;m.position.z-=spd*dt;spinWheels(b,spd,dt);intro.eng=.15+spd/20;
     setE(b.lamps.tail,dist<30?3:0);setE(b.lamps.sigL,dist<50&&Math.floor(intro.t*3.2)%2===0?3.2:0);
     if(dist<35&&!intro.said){intro.said=1;speech.say('Kaveri Didi','Nayapur Gate! Last stop. Everyone off, please.');setSub('Conductor: Nayapur Gate! Last stop. Everyone off, please.',4200)}
-    if(dist<=.12){m.position.z=88;intro.phase=1;intro.t=0;intro.eng=.1;setE(b.lamps.sigL,0);audio.burst(.25,.6,2200)}
+    if(dist<=.12){m.position.z=88;b.speed=0;intro.phase=1;intro.t=0;intro.eng=.1;setE(b.lamps.sigL,0);audio.burst(.25,.6,2200)}
     camTarget.lerp(V3(m.position.x,2,m.position.z),.12);camera.lookAt(camTarget);
     return;
   }
@@ -39,7 +39,7 @@ function updateIntro(dt){
     return;
   }
   if(intro.t>2.2&&intro.bus){
-    intro.bs=Math.min(13,intro.bs+3.4*dt);m.position.z-=intro.bs*dt;spinWheels(b,intro.bs,dt);intro.eng=.2+intro.bs/20;setE(b.lamps.tail,0);
+    intro.bs=Math.min(13,intro.bs+3.4*dt);b.speed=intro.bs;m.position.z-=intro.bs*dt;spinWheels(b,intro.bs,dt);intro.eng=.2+intro.bs/20;setE(b.lamps.tail,0);
     if(m.position.z<12){scene.remove(m);const i=vehicles.indexOf(b);if(i>=0)vehicles.splice(i,1);intro.bus=null;intro.eng=0}
   }
   const wp=intro.wps[intro.wi],dx=wp[0]-p.x,dz=wp[1]-p.z,l=Math.hypot(dx,dz);

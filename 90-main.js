@@ -23,7 +23,7 @@ function loop(){
   if(gameOn&&!paused&&!document.hidden){
     if(state.intro){updateIntro(dt);updateLife(dt,tm)}
     else{state.crashCd-=dt;updatePlayer(dt);if(active)updateVehicle(active,dt);updatePolice(dt);updateMission(dt);updateLife(dt,tm);updateCamera();templeCheck()}
-    updateTime(dt);updateRain(dt);vehicles.forEach(v=>updateLights(v,tm));updateHeadlight();audio.setEngine(active?Math.abs(active.speed)/active.max:intro.eng,!!active||intro.eng>0);audio.tick(dt,!!state.mission&&state.mission.m.id===4);
+    updateTime(dt);updateRain(dt);vehicles.forEach(v=>{updateLights(v,tm);emitExhaust(v,dt)});updateSmoke(dt);updateHeadlight();audio.setEngine(active?Math.abs(active.speed)/active.max:intro.eng,!!active||intro.eng>0);audio.tick(dt,!!state.mission&&state.mission.m.id===4);
     if(state.beam)state.beam.r.rotation.z+=dt*3;buildWorld.water.position.y=.06+Math.sin(tm)*.03;updateHud();
   }else{audio.setEngine(0,false);audio.setRain(0);if(!gameOn)titleCam(tm)}
   renderer.render(scene,camera);

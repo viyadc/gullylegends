@@ -6,12 +6,12 @@ function pushVehicle(v){
   return hit;
 }
 const HANDLING=Object.freeze({
-  auto:{L:1.8,lean:.04,lt:{f:1.32,r:-1.32,y:.78,w:0,one:1,sw:.82}},
-  taxi:{L:2.4,lean:.05,lt:{f:1.72,r:-1.72,y:.82,w:.68,sw:.88}},
-  scooter:{L:1.2,lean:-.4,lt:{f:.82,r:-.82,y:.95,w:0,one:1,sw:.3}},
-  car:{L:2.6,lean:.05,lt:{f:1.93,r:-1.93,y:.8,w:.68,sw:.9}},
-  bus:{L:5.6,lean:.03,lt:{f:4.52,r:-4.52,y:.85,w:1.05,sw:1.45}},
-  bike:{L:1.4,lean:-.45,lt:{f:.95,r:-.92,y:1.05,w:0,one:1,sw:.22}}
+  auto:{L:1.8,lean:.04,ex:[.55,.3,-1.34],lt:{f:1.32,r:-1.32,y:.78,w:0,one:1,sw:.82}},
+  taxi:{L:2.4,lean:.05,ex:[-.6,.3,-1.76],lt:{f:1.72,r:-1.72,y:.82,w:.68,sw:.88}},
+  scooter:{L:1.2,lean:-.4,ex:[.3,.28,-.9],lt:{f:.82,r:-.82,y:.95,w:0,one:1,sw:.3}},
+  car:{L:2.6,lean:.05,ex:[-.6,.28,-1.97],lt:{f:1.93,r:-1.93,y:.8,w:.68,sw:.9}},
+  bus:{L:5.6,lean:.03,ex:[-1,.5,-4.56],lt:{f:4.52,r:-4.52,y:.85,w:1.05,sw:1.45}},
+  bike:{L:1.4,lean:-.45,ex:[.28,.3,-.95],lt:{f:.95,r:-.92,y:1.05,w:0,one:1,sw:.22}}
 });
 const VEHICLES=Object.freeze({
   auto:{name:'Kaali-Peeli Auto',max:22,acc:16,r:1.5,seat:[0,.15,.25],paint:[1],parts:[[1.6,.55,2.6,0x151515,0,.5,0],[1.7,.12,1.9,0xfacc15,0,2.35,-.3],[.08,1.7,.08,0xfacc15,-.8,1.4,.5],[.08,1.7,.08,0xfacc15,.8,1.4,.5],[.08,1.7,.08,0xfacc15,-.8,1.4,-1.1],[.08,1.7,.08,0xfacc15,.8,1.4,-1.1],[1.4,.5,.1,0xbfe3f0,0,1.3,.6,{transparent:true,opacity:.35}],[1.5,.5,.5,0x7c2d12,0,.95,-.7]],wheels:[[0,.35,1.1,.35],[-.85,.35,-.7,.35],[.85,.35,-.7,.35]]},
@@ -32,6 +32,7 @@ function makeVehicle(kind,x,z,rot){
   if(lt.one){lamps.head.push(lamp(0xfff4c2,0xd8d8c0,0,lt.y,lt.f,.28));lamps.tail.push(lamp(0xff2a2a,0x7a1010,0,ty,lt.r,.24))}
   else[-1,1].forEach(sd=>{lamps.head.push(lamp(0xfff4c2,0xd8d8c0,sd*lt.w,lt.y,lt.f,.26));lamps.tail.push(lamp(0xff2a2a,0x7a1010,sd*lt.w,ty,lt.r,.26))});
   [1,-1].forEach(sd=>{const side=sd>0?lamps.sigL:lamps.sigR;side.push(lamp(0xff9a00,0xb36b00,sd*lt.sw,lt.y-.14,lt.f-.02,.16),lamp(0xff9a00,0xb36b00,sd*lt.sw,ty-.1,lt.r+.02,.16))});
+  const px=HANDLING[kind].ex,pipe=cyl(.05,.05,.3,0x4b5563,px[0],px[1],px[2]+.08,g,8);pipe.rotation.x=Math.PI/2;
   g.position.set(x,0,z);g.rotation.y=rot;scene.add(g);
   const v={mesh:g,kind,lamps,wheels:wh,steer:0,L:HANDLING[kind].L,lean:HANDLING[kind].lean,seat:d.seat,pm:d.paint.map(i=>ms[i]),name:d.name,max:d.max,acc:d.acc,r:d.r,speed:0};vehicles.push(v);return v;
 }
@@ -61,7 +62,7 @@ function updateVehicle(v,dt){
     const b=hitBox;
     if(b&&b.shop&&sp>6){const fee=b.shop==='stall'?40:100,who=b.shop==='stall'?'a stall':b.shop;state.cash=Math.max(0,state.cash-fee);money();toast('You damaged '+who+'. You paid ₹'+fee+' to the owner.',3600)}
   }
-  people.forEach(p=>{if(p.down<=0&&sp>3&&Math.hypot(v.mesh.position.x-p.m.position.x,v.mesh.position.z-p.m.position.z)<COLLIDER[v.kind].r+.5){p.down=3;audio.thud();v.speed*=.5;setWanted(state.wanted+1);toast('You hit a pedestrian! Someone called the police.',3600)}});
+  people.forEach(p=>{if(p.down<=0&&sp>3&&Math.hypot(v.mesh.position.x-p.m.position.x,v.mesh.position.z-p.m.position.z)<COLLIDER[v.kind].r+.5){p.down=5;knock(p,V3(Math.sin(r),0,Math.cos(r)),Math.min(14,2+sp*.6));audio.thud();v.speed*=.5;setWanted(state.wanted+1);toast('You hit a pedestrian! Someone called the police.',3600)}});
   if(puddleGroup.visible)PUDDLES.forEach(q=>{if(Math.hypot(v.mesh.position.x-q[0],v.mesh.position.z-q[1])<2.4)v.speed*=Math.max(0,1-1.1*dt)});
   bounds(v.mesh.position,0);
 }

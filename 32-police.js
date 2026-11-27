@@ -21,6 +21,8 @@ function steerTo(u,tx,tz,spd,dt){
   m.rotation.y+=clamp(df,-2.4*dt,2.4*dt);
   const s=spd*(1-.55*Math.min(1,Math.abs(df)/1.2));
   m.position.x+=Math.sin(m.rotation.y)*s*dt;m.position.z+=Math.cos(m.rotation.y)*s*dt;pushOut(m.position,1.2);
+  u.exT=(u.exT||0)-dt;
+  if(u.exT<=0&&s>1){u.exT=.08;m.updateMatrixWorld();exPos.set(-.5,.3,-1.7);m.localToWorld(exPos);const yr=m.rotation.y;puff(exPos.x,exPos.y,exPos.z,-Math.sin(yr)*.9,-Math.cos(yr)*.9,true)}
 }
 function chaseJeep(u,tp,dt){
   const m=u.m;u.pt=(u.pt||0)-dt;
@@ -169,15 +171,18 @@ function swapWeapon(){
 }
 function hitUnit(u,dmg){u.hp-=dmg;if(u.hp<=0)killUnit(u)}
 function killUnit(u){
-  u.dead=u.k==='foot'?2:3;state.kills++;if(u.k==='foot')u.m.rotation.x=-1.4;audio.thud();
+  u.dead=u.k==='foot'?4:3;state.kills++;
+  if(u.k==='foot'){const pp=player.mesh.position;knock(u,V3(u.m.position.x-pp.x,0,u.m.position.z-pp.z),5)}
+  audio.thud();
   if(u.armed)state.ammo=Math.min(99,state.ammo+6);
   state.cash+=u.k==='foot'?60:u.k==='jeep'?150:300;money();hudWeapon();
   toast('Officer down! The police are sending more help.',3600);
   const was=state.wanted;setWanted(was+1);if(was>=6)copFoot(true,6);
 }
-function hitPerson(q){
-  if(q.down>0)return;q.down=4;audio.thud();setWanted(state.wanted+1);
-  toast('You hurt a person! Someone called the police.',3600);
+function hitPerson(q,dmg){
+  if(q.down>0)return;q.down=5;audio.thud();
+  const pp=player.mesh.position;knock(q,V3(q.m.position.x-pp.x,0,q.m.position.z-pp.z),2.5+(dmg||10)*.35);
+  setWanted(state.wanted+1);toast('You hurt a person! Someone called the police.',3600);
 }
 const MOVES=[{k:'jab',dur:.26,dmg:8},{k:'cross',dur:.3,dmg:11},{k:'hook',dur:.34,dmg:13},{k:'kick',dur:.42,dmg:15}];
 function playerAttack(){
@@ -194,7 +199,7 @@ function playerAttack(){
   if(pistol){
     state.atkCd=.35;player.atk=.25;player.fightIdle=0;state.ammo--;hudWeapon();audio.shot();
     const fx=Math.sin(player.mesh.rotation.y),fz=Math.cos(player.mesh.rotation.y);
-    if(best){tracer(p,best.m.position);if(best.c)hitUnit(best.o,28);else hitPerson(best.o)}
+    if(best){tracer(p,best.m.position);if(best.c)hitUnit(best.o,28);else hitPerson(best.o,12)}
     else tracer(p,V3(p.x+fx*20,0,p.z+fz*20));
     return;
   }
@@ -206,7 +211,7 @@ function updatePolice(dt){
   for(let i=units.length-1;i>=0;i--){
     const u=units[i];
     if(u.dead>0){
-      u.dead-=dt;if(u.k==='heli'&&u.m.position.y>1)u.m.position.y=Math.max(1,u.m.position.y-dt*9);
+      u.dead-=dt;if(u.rag)stepRagdoll(u,dt);if(u.k==='heli'&&u.m.position.y>1)u.m.position.y=Math.max(1,u.m.position.y-dt*9);
       if(u.dead<=0){if(u.fleet){u.m.visible=false;u.mode='wreck'}else removeUnit(u,i)}
       continue;
     }

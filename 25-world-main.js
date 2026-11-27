@@ -1,5 +1,5 @@
 'use strict';
 function buildWorld(){
   const rand=rng(7);
-  buildSky();buildGround();buildRoads();buildBuildings(rand);buildGate();buildTemple();buildGarage();buildMarket();buildLamps();buildStreetArt();buildFarLamps();buildPoliceYard();buildBarricades();buildNature(rand);
+  buildSky();buildGround();buildRoads();buildBuildings(rand);buildGate();buildTemple();buildGarage();buildMarket();buildLamps();buildStreetArt();buildFarLamps();buildPoliceYard();buildBarricades();buildNature(rand);buildSmoke();
 }

@@ -77,7 +77,7 @@ function applyMove(dt,m,P){
   if(b&&pr<.5){const dx=b.m.position.x-pos.x,dz=b.m.position.z-pos.z,d=Math.hypot(dx,dz);if(d>1.1){pos.x+=dx/d*3.5*dt;pos.z+=dz/d*3.5*dt}}
   if(pr>.45&&!m.hit){
     m.hit=true;
-    if(b&&!(b.c&&(b.o.dead||b.o.mode!=='active'))&&Math.hypot(b.m.position.x-pos.x,b.m.position.z-pos.z)<3.4){audio.thud();if(b.c)hitUnit(b.o,m.dmg);else hitPerson(b.o)}
+    if(b&&!(b.c&&(b.o.dead||b.o.mode!=='active'))&&Math.hypot(b.m.position.x-pos.x,b.m.position.z-pos.z)<3.4){audio.thud();if(b.c)hitUnit(b.o,m.dmg);else hitPerson(b.o,m.dmg)}
   }
   if(pr>=1)player.move=null;
 }
@@ -103,8 +103,9 @@ function updatePlayer(dt){
 }
 function updateLife(dt,tm){
   people.forEach(p=>{
-    if(p.down>0){p.down-=dt;p.m.rotation.x=-1.4;p.m.position.y=.25;return}
-    p.m.rotation.x=0;p.t+=p.spd*dt/p.len;const u=((p.t%2)+2)%2,k=u<1?u:2-u,sg=u<1?1:-1;
+    if(p.down>0){p.down-=dt;if(p.rag)stepRagdoll(p,dt);return}
+    if(p.rag)endRagdoll(p);
+    p.t+=p.spd*dt/p.len;const u=((p.t%2)+2)%2,k=u<1?u:2-u,sg=u<1?1:-1;
     p.m.position.lerpVectors(p.a,p.b,k);p.m.rotation.y=Math.atan2((p.b.x-p.a.x)*sg,(p.b.z-p.a.z)*sg);
     p.ph+=dt*p.spd*4.5;swing(p.h,p.ph,.6);p.m.position.y=Math.abs(Math.sin(p.ph))*.04;
   });
