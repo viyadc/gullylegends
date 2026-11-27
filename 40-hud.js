@@ -17,7 +17,6 @@ function drawWorld(g,w,h,cx,cz,s,full){
   if(!state.zones.east)g.fillRect(X(138),Z(-70),(240-138)*s,310*s);
   if(!state.zones.west)g.fillRect(X(-240),Z(-70),(240-138)*s,310*s);
   if(!state.zones.south)g.fillRect(X(-138),Z(138),276*s,102*s);
-  g.fillStyle='#38bdf8';vehicles.forEach(v=>{if(v===active)return;g.beginPath();g.arc(X(v.mesh.position.x),Z(v.mesh.position.z),full?4:3,0,7);g.fill()});
   const pp=(active?active.mesh:player.mesh),pr=pp.rotation.y;
   g.save();g.translate(X(pp.position.x),Z(pp.position.z));g.rotate(Math.PI-pr);g.fillStyle='#22c55e';g.strokeStyle='#fff';g.lineWidth=1.5;g.beginPath();g.moveTo(0,-8);g.lineTo(6,7);g.lineTo(-6,7);g.closePath();g.fill();g.stroke();g.restore();
 }
@@ -29,6 +28,7 @@ function updateHud(){
   if(active)msg='';
   else if(nearVehicle()){const nv=nearVehicle();msg=nv.rescue&&state.retry?'Take the taxi back to your mission':vehLocked(nv)?'Locked until Level '+VEH_UNLOCK[nv.kind]:'Ride the '+nv.name}
   else if(spot)msg='Open '+spot.name;
+  else if(nearChar())msg='Talk to '+nearChar().n;
   else if(player.mesh.position.distanceTo(marker.pos)<3.2)msg='Open the mission board';
   if(msg){setText(pr,msg);pr.classList.remove('hidden')}else pr.classList.add('hidden');
   const c=(active?active.mesh:player.mesh).position;drawWorld($('radar').getContext('2d'),128,128,c.x,c.z,1.1,false);

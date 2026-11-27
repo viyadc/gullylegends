@@ -11,6 +11,6 @@ const vehicles=[],boxes=[],people=[],cows=[],chars=[],units=[],mats={};
 let camY=0,camX=.35,drag=false,px=0,py=0;
 const camTarget=V3(0,1,0);
 const keys={up:false,down:false,left:false,right:false,space:false,run:false};
-const state={cash:500,wanted:0,wantTimer:0,crashCd:0,mission:null,done:new Set(),beam:null,toastTimer:0,ended:false,health:100,lost:0,log:[],owned:new Set(),tuned:0,paintI:0,tab:'Levels',rebind:null,spot:null,lastId:1,inTemple:false,cam:0,zones:{east:false,west:false,south:false},retry:null,hour:7,lastHour:-1,wxT:'clear',rainK:0,fogD:.0045,dim:1,hint:0,ammo:0,weapon:'fist',vest:false,kills:0,buf:'',atkCd:0};
-const binds={act:'KeyF',horn:'KeyH',jobs:'KeyM',map:'KeyN',jump:'Space',fire:'ControlRight',swap:'KeyQ',cam:'KeyC'};
+const state={cash:500,wanted:0,wantTimer:0,crashCd:0,mission:null,done:new Set(),beam:null,toastTimer:0,ended:false,health:100,lost:0,log:[],owned:new Set(),tuned:0,paintI:0,tab:'Levels',rebind:null,spot:null,lastId:1,inTemple:false,met:new Set(),cam:0,zones:{east:false,west:false,south:false},retry:null,hour:7,lastHour:-1,wxT:'clear',rainK:0,fogD:.0045,dim:1,hint:0,ammo:0,weapon:'fist',vest:false,kills:0,buf:'',atkCd:0};
+const binds={act:'KeyE',veh:'KeyF',horn:'KeyH',jobs:'KeyJ',map:'KeyM',jump:'Space',fire:'ControlRight',swap:'KeyQ',cam:'KeyC'};
 const marker={pos:V3(10,0,10),icon:null};

@@ -70,9 +70,10 @@ function ensureVehicle(need){
   const v=makeVehicle(kinds[0],p.x+4,p.z+3,0);pushOut(v.mesh.position,v.r);v.free=true;
 }
 function begin(m){
+  m.stages.forEach(q=>{if(q.w)state.met.add(q.w)});
   state.mission={m,i:0,t:m.time||Infinity,go:false};state.lastId=m.id;closeScreen('board');ensureVehicle(m.need);
   $('tracker').classList.remove('hidden');$('steps').classList.remove('hidden');setText($('mTitle'),m.odd?m.name:'Level '+m.id+' • '+m.name);showStep();
-  setText($('timer'),m.time?fmtTime(m.time):'No rush');setBeam(m.stages[0].p);
+  const tmr=$('timer');tmr.classList.toggle('hidden',!m.time);if(m.time)setText(tmr,fmtTime(m.time));setBeam(m.stages[0].p);
 }
 function startMission(id){const m=MISSIONS.find(q=>q.id===id);if(!m||state.mission||state.done.has(id)||state.done.size!==id-1)return;begin(m)}
 function endMission(){state.mission=null;setBeam(null);$('tracker').classList.add('hidden');$('steps').classList.add('hidden')}

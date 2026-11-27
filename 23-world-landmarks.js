@@ -24,11 +24,11 @@ function buildGarage(){
   const gs=new THREE.Mesh(new THREE.PlaneGeometry(6,1.3),new THREE.MeshBasicMaterial({map:signTex('UDAAN MOTORS','#1e3a8a','#ffd166','Repairs and Paint')}));gs.position.set(0,4.5,2.35);gar.add(gs);
   gar.position.set(11,0,20);gar.rotation.y=Math.PI;scene.add(gar);addBox(11,20,7.4,4.8);
   const ring=new THREE.Mesh(new THREE.RingGeometry(1.8,2.4,32),new THREE.MeshBasicMaterial({color:0xf7b500,side:THREE.DoubleSide,transparent:true,opacity:.85}));ring.rotation.x=-Math.PI/2;ring.position.set(10,.09,10);scene.add(ring);
-  marker.icon=new THREE.Mesh(new THREE.OctahedronGeometry(.6),new THREE.MeshStandardMaterial({color:0xf7b500,emissive:0xd97706,emissiveIntensity:.8}));marker.icon.position.set(10,2.2,10);scene.add(marker.icon);
+  
 
 }
 function buildMarket(){
-  [[25,9,0xe4452b],[40,9,0xf7b500],[20,-9,0x2f9e44],[40,-9,0x8e44ad],[-10,-15,0xf59e0b]].forEach(q=>{const st=new THREE.Group();block(2.8,.9,1.6,0x7c4a1e,0,.45,0,st);block(3.2,.18,2.2,q[2],0,2.5,0,st);[-1.4,1.4].forEach(a=>cyl(.07,.07,2.5,0x444444,a,1.25,.8,st,6));[0xff8c1a,0xe4452b,0x2f9e44].forEach((c,i)=>block(.5,.35,.5,c,-.9+i*.9,1.05,0,st));st.position.set(q[0],0,q[1]);scene.add(st);addBox(q[0],q[1],3.2,2.2,'stall')});
+  [[25,9,0xe4452b],[40,9,0xf7b500],[20,-9,0x2f9e44],[40,-9,0x8e44ad],[-10,-15,0xf59e0b]].forEach(q=>{const st=new THREE.Group();block(2.8,.9,1.6,0x7c4a1e,0,.45,0,st);block(3.2,.18,2.2,q[2],0,2.5,0,st);[-1.4,1.4].forEach(a=>cyl(.07,.07,2.5,0x444444,a,1.25,.8,st,6));[0xff8c1a,0xe4452b,0x2f9e44].forEach((c,i)=>block(.5,.35,.5,c,-.9+i*.9,1.05,0,st));st.position.set(q[0],0,q[1]);scene.add(st);addBox(q[0],q[1],2.9,1.8,'stall')});
   
 
 }

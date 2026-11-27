@@ -1,4 +1,10 @@
 'use strict';
+const COLLIDER=Object.freeze({auto:{r:.95,o:[-.6,.6]},taxi:{r:1,o:[-.9,0,.9]},scooter:{r:.5,o:[-.4,.4]},car:{r:1,o:[-1,0,1]},bus:{r:1.55,o:[-3,-1.5,0,1.5,3]},bike:{r:.5,o:[-.4,.4]}});
+function pushVehicle(v){
+  const k=COLLIDER[v.kind],p=v.mesh.position,r=v.mesh.rotation.y,fx=Math.sin(r),fz=Math.cos(r);let hit=false;
+  k.o.forEach(o=>{const c={x:p.x+fx*o,z:p.z+fz*o};if(pushOut(c,k.r)){hit=true;p.x=c.x-fx*o;p.z=c.z-fz*o}});
+  return hit;
+}
 const HANDLING=Object.freeze({
   auto:{L:1.8,lean:.04,lt:{f:1.32,r:-1.32,y:.78,w:0,one:1,sw:.82}},
   taxi:{L:2.4,lean:.05,lt:{f:1.72,r:-1.72,y:.82,w:.68,sw:.88}},
@@ -50,12 +56,12 @@ function updateVehicle(v,dt){
   v.mesh.rotation.z+=(v.lean*v.steer*ratio-v.mesh.rotation.z)*Math.min(1,6*dt);
   const r=v.mesh.rotation.y;v.mesh.position.x+=Math.sin(r)*v.speed*dt;v.mesh.position.z+=Math.cos(r)*v.speed*dt;
   const sp=Math.abs(v.speed);hitBox=null;
-  if(pushOut(v.mesh.position,v.r)&&state.crashCd<=0&&sp>4){
+  if(pushVehicle(v)&&state.crashCd<=0&&sp>4){
     state.crashCd=1;v.speed*=-.3;audio.crash();
     const b=hitBox;
     if(b&&b.shop&&sp>6){const fee=b.shop==='stall'?40:100,who=b.shop==='stall'?'a stall':b.shop;state.cash=Math.max(0,state.cash-fee);money();toast('You damaged '+who+'. You paid ₹'+fee+' to the owner.',3600)}
   }
-  people.forEach(p=>{if(p.down<=0&&sp>3&&Math.hypot(v.mesh.position.x-p.m.position.x,v.mesh.position.z-p.m.position.z)<v.r+.5){p.down=3;audio.thud();v.speed*=.5;setWanted(state.wanted+1);toast('You hit a pedestrian! Someone called the police.',3600)}});
+  people.forEach(p=>{if(p.down<=0&&sp>3&&Math.hypot(v.mesh.position.x-p.m.position.x,v.mesh.position.z-p.m.position.z)<COLLIDER[v.kind].r+.5){p.down=3;audio.thud();v.speed*=.5;setWanted(state.wanted+1);toast('You hit a pedestrian! Someone called the police.',3600)}});
   if(puddleGroup.visible)PUDDLES.forEach(q=>{if(Math.hypot(v.mesh.position.x-q[0],v.mesh.position.z-q[1])<2.4)v.speed*=Math.max(0,1-1.1*dt)});
   bounds(v.mesh.position,0);
 }

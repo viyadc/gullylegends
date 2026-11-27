@@ -2,7 +2,8 @@
 const HELP=Object.freeze([
   'Move: W A S D or the arrow keys. Hold Shift to run. Drag the screen to turn the camera.',
   'Camera view: switch between close view, far view and first person.',
-  'Use the Interact key to get in or out of a vehicle, shop, rest or pray.',
+  'Interact key (E): talk to people, open shops, rest at home and pray at the temple.',
+  'Vehicle key (F): get in or out of a vehicle. Map key (M) shows the city. Jobs key (J) opens the mission board.',
   'The horn works only when you are in a vehicle.',
   'Fight like a street fighter: press the Attack key (Right Ctrl) to throw jabs, punches, hooks and kicks in a combo. Buy a pistol at the ammo shop, then use the switch key to change weapons.',
   'Spend money at Udaan Motors, the chai stall, Tara Traders, the temple, the hospital, the ammo shop and your flat.',
@@ -15,7 +16,7 @@ const HELP=Object.freeze([
   'The day turns into night, and the weather changes through the day.',
   'Once the story is done, keep earning with side jobs on the mission board.'
 ]);
-const ACTS=Object.freeze([['act','Interact'],['cam','Camera view'],['fire','Attack'],['swap','Switch weapon'],['horn','Horn'],['jobs','Mission board'],['map','City map'],['jump','Jump or brake']]);
+const ACTS=Object.freeze([['act','Interact (people, shops, temple)'],['veh','Vehicle (get in or out)'],['cam','Camera view'],['fire','Attack'],['swap','Switch weapon'],['horn','Horn'],['jobs','Mission board'],['map','City map'],['jump','Jump or brake']]);
 const TABS=['Levels','Messages','Map','Help','Controls'];
 const keyName=c=>c.replace('ControlRight','Right Ctrl').replace('ControlLeft','Left Ctrl').replace('Key','').replace('Digit','').replace('Arrow','Arrow ');
 function renderMenu(){

@@ -24,7 +24,7 @@ function loop(){
     if(state.intro){updateIntro(dt);updateLife(dt,tm)}
     else{state.crashCd-=dt;updatePlayer(dt);if(active)updateVehicle(active,dt);updatePolice(dt);updateMission(dt);updateLife(dt,tm);updateCamera();templeCheck()}
     updateTime(dt);updateRain(dt);vehicles.forEach(v=>updateLights(v,tm));updateHeadlight();audio.setEngine(active?Math.abs(active.speed)/active.max:intro.eng,!!active||intro.eng>0);audio.tick(dt,!!state.mission&&state.mission.m.id===4);
-    marker.icon.rotation.y+=dt*2;if(state.beam)state.beam.r.rotation.z+=dt*3;buildWorld.water.position.y=.06+Math.sin(tm)*.03;updateHud();
+    if(state.beam)state.beam.r.rotation.z+=dt*3;buildWorld.water.position.y=.06+Math.sin(tm)*.03;updateHud();
   }else{audio.setEngine(0,false);audio.setRain(0);if(!gameOn)titleCam(tm)}
   renderer.render(scene,camera);
 }
@@ -39,7 +39,8 @@ function bindInput(){
     if(c==='ShiftLeft'||c==='ShiftRight'){keys.run=true;return}
     if(mode==='play'&&cheatKey(c)){e.preventDefault();return}
     if(mode==='play'&&(map[c]||c===binds.jump)){keys[map[c]||'space']=true;if(c==='Space'||c.startsWith('Arrow'))e.preventDefault();return}
-    if(c===binds.act&&mode==='play')interact();
+    if(c===binds.act&&mode==='play')interactThing();
+    else if(c===binds.veh&&mode==='play')interactVehicle();
     else if(c===binds.horn&&mode==='play'&&active)audio.horn();
     else if(c===binds.fire&&mode==='play'){e.preventDefault();playerAttack()}
     else if(c===binds.swap&&mode==='play')swapWeapon();

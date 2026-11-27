@@ -1,14 +1,14 @@
 'use strict';
 const CHARS=Object.freeze([
-  {n:'Meera',x:-12,z:42,c:0x2f9e9e,p:0x1e3a8a,s:0xc58a5a,h:0x1a1a1a},
-  {n:'Iqbal Uncle',x:10,z:14,c:0xd9d4c5,p:0x4b5563,s:0xa8683a,h:0xdddddd},
-  {n:'Tara',x:30,z:-12,c:0xe4452b,p:0x7c2d12,s:0xc58a5a,h:0x1a1a1a},
-  {n:'Dev',x:12,z:36,c:0x3b82f6,p:0x1f2937,s:0xa8683a,h:0x1a1a1a},
-  {n:'Bunty',x:-12,z:-9,c:0x8e44ad,p:0x111827,s:0xd9a577,h:0x3b2412},
-  {n:'Raju Bhai',x:-34,z:-8,c:0xf59e0b,p:0x1f2937,s:0xa8683a,h:0x1a1a1a,unlock:2},
-  {n:'Pappan',x:15,z:13,c:0x1d4ed8,p:0x374151,s:0xa8683a,h:0x555555,unlock:4},
-  {n:'Kaveri Didi',x:77,z:49,c:0x16a34a,p:0x1f2937,s:0xc58a5a,h:0x1a1a1a,unlock:10},
-  {n:'Gopal',x:24,z:150,c:0xe5e7eb,p:0x8b5a2b,s:0xa8683a,h:0xdddddd,unlock:9}
+  {n:'Meera',hi:'Hi Aru! Mind the cows today.',x:-12,z:42,c:0x2f9e9e,p:0x1e3a8a,s:0xc58a5a,h:0x1a1a1a},
+  {n:'Iqbal Uncle',hi:'The garage is busy today, Aru.',x:10,z:14,c:0xd9d4c5,p:0x4b5563,s:0xa8683a,h:0xdddddd},
+  {n:'Tara',hi:'Need anything? I can find it for you.',x:30,z:-12,c:0xe4452b,p:0x7c2d12,s:0xc58a5a,h:0x1a1a1a},
+  {n:'Dev',hi:'Route 108 never sleeps!',x:12,z:36,c:0x3b82f6,p:0x1f2937,s:0xa8683a,h:0x1a1a1a},
+  {n:'Bunty',hi:'Race me any time, mechanic.',x:-12,z:-9,c:0x8e44ad,p:0x111827,s:0xd9a577,h:0x3b2412},
+  {n:'Raju Bhai',hi:'Need a taxi job? Just ask me.',x:-34,z:-8,c:0xf59e0b,p:0x1f2937,s:0xa8683a,h:0x1a1a1a,unlock:2},
+  {n:'Pappan',hi:'That old auto still runs like a dream.',x:15,z:13,c:0x1d4ed8,p:0x374151,s:0xa8683a,h:0x555555,unlock:4},
+  {n:'Kaveri Didi',hi:'Buses are my second home.',x:77,z:49,c:0x16a34a,p:0x1f2937,s:0xc58a5a,h:0x1a1a1a,unlock:10},
+  {n:'Gopal',hi:'The fields are green this year.',x:24,z:150,c:0xe5e7eb,p:0x8b5a2b,s:0xa8683a,h:0xdddddd,unlock:9}
 ]);
 function ball(parent,r,c,x,y,z){const m=new THREE.Mesh(new THREE.SphereGeometry(r,10,10),mat(c));m.position.set(x,y,z);m.castShadow=true;parent.add(m);return m}
 function pivot(parent,x,y,z){const p=new THREE.Group();p.position.set(x,y,z);parent.add(p);return p}
@@ -34,7 +34,7 @@ function makePerson(color,x,z,x2,z2){
   people.push({m:h.g,h,a:V3(x,0,z),b:V3(x2,0,z2),len:Math.hypot(x2-x,z2-z),t:Math.random()*2,spd:1.2+Math.random()*.6,ph:Math.random()*6,down:0});
 }
 function makeChar(c){
-  const h=humanoid(c.c,c.p,c.s,c.h);h.g.position.set(c.x,0,c.z);h.g.add(label(c.n,2.5));scene.add(h.g);chars.push({m:h.g,h,o:Math.random()*6,n:c.n,x:c.x,z:c.z,u:c.unlock||0});addBox(c.x,c.z,.8,.8);
+  const h=humanoid(c.c,c.p,c.s,c.h);h.g.position.set(c.x,0,c.z);h.g.add(label(c.n,2.5));scene.add(h.g);chars.push({m:h.g,h,o:Math.random()*6,n:c.n,hi:c.hi,x:c.x,z:c.z,u:c.unlock||0});h.g.visible=false;
 }
 function makeCow(x,z){
   const g=new THREE.Group();block(1,.9,1.9,0xf3efe6,0,1.1,0,g);block(.5,.5,.6,0xf3efe6,0,1.4,1.2,g);block(.52,.3,.3,0x1a1a1a,0,1.5,1.45,g);block(.45,.3,.1,0x6b4a2a,.3,1.2,.2,g);[[-.3,-.7],[.3,-.7],[-.3,.7],[.3,.7]].forEach(l=>block(.18,.7,.18,0xd9d2c0,l[0],.35,l[1],g));
@@ -109,7 +109,7 @@ function updateLife(dt,tm){
     p.ph+=dt*p.spd*4.5;swing(p.h,p.ph,.6);p.m.position.y=Math.abs(Math.sin(p.ph))*.04;
   });
   const pp=(active?active.mesh:player.mesh).position;
-  chars.forEach(c=>{const vis=state.done.size>=c.u;if(c.m.visible!==vis)c.m.visible=vis;const dx=pp.x-c.m.position.x,dz=pp.z-c.m.position.z;if(Math.hypot(dx,dz)<9)c.m.rotation.y=Math.atan2(dx,dz);const w=Math.sin(tm*2+c.o)*.08;c.h.aR.rotation.x=w;c.h.aL.rotation.x=-w});
+  chars.forEach(c=>{const vis=(c.u>0&&state.done.size>=c.u)||state.met.has(c.n);if(c.m.visible!==vis)c.m.visible=vis;const dx=pp.x-c.m.position.x,dz=pp.z-c.m.position.z;if(Math.hypot(dx,dz)<9)c.m.rotation.y=Math.atan2(dx,dz);const w=Math.sin(tm*2+c.o)*.08;c.h.aR.rotation.x=w;c.h.aL.rotation.x=-w});
   cows.forEach(c=>{
     c.t+=dt;const a=c.t*.15;let tx=c.home.x+Math.sin(a)*2.2,tz=c.home.z+Math.cos(a*.8)*1.6;
     const dx=tx-pp.x,dz=tz-pp.z,d=Math.hypot(dx,dz);

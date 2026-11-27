@@ -10,13 +10,33 @@ const PAINTS=Object.freeze([0xe4452b,0x2563eb,0x16a34a,0x7c3aed,0xf59e0b,0x11182
 function hp(){$('hpBar').style.width=Math.max(0,state.health)+'%'}
 function heal(n){state.health=Math.min(100,state.health+n);hp()}
 function nearSpot(){const p=player.mesh.position;return SPOTS.find(q=>Math.hypot(p.x-q.x,p.z-q.z)<3.6)}
+function nearChar(){const p=player.mesh.position;return chars.find(c=>c.m.visible&&Math.hypot(p.x-c.m.position.x,p.z-c.m.position.z)<3)}
+function exitVehicle(){
+  const r=active.mesh.rotation.y,p=active.mesh.position;
+  player.mesh.position.set(p.x+Math.cos(r)*2.2,0,p.z-Math.sin(r)*2.2);pushOut(player.mesh.position,.5);swing(player.h,0,0);player.pose={};
+  active.speed=0;active=null;player.mesh.rotation.z=0;
+}
+function interactVehicle(){
+  if(paused)return;
+  if(active){exitVehicle();return}
+  const v=nearVehicle();if(!v)return;
+  if(v.rescue&&state.retry){startRide(v);return}
+  if(vehLocked(v)){toast('The '+v.name+' unlocks after Level '+VEH_UNLOCK[v.kind]+'.');return}
+  active=v;
+}
+function interactThing(){
+  if(paused||active)return;
+  const sp=nearSpot();
+  if(sp){state.spot=sp;renderShop();openScreen('shopScreen');return}
+  const c=nearChar();
+  if(c){toast(c.n+': '+c.hi,4200);speech.say(c.n,c.hi)}
+}
 function interact(){
   if(paused)return;
-  if(active){const r=active.mesh.rotation.y,p=active.mesh.position;player.mesh.position.set(p.x+Math.cos(r)*2.2,0,p.z-Math.sin(r)*2.2);pushOut(player.mesh.position,.5);swing(player.h,0,0);player.pose={};active.speed=0;active=null;player.mesh.rotation.z=0;return}
+  if(active){exitVehicle();return}
   const v=nearVehicle(),sp=nearSpot();
-  if(v&&v.rescue&&state.retry){startRide(v);return}
-  if(sp&&!(v&&player.mesh.position.distanceTo(v.mesh.position)<2.8)){state.spot=sp;renderShop();openScreen('shopScreen');return}
-  if(v){if(vehLocked(v)){toast('The '+v.name+' unlocks after Level '+VEH_UNLOCK[v.kind]+'.');return}active=v}
+  if(v&&(!sp||player.mesh.position.distanceTo(v.mesh.position)<2.8)){interactVehicle();return}
+  interactThing();
 }
 function renderShop(){
   const sp=state.spot;setText($('shopTitle'),sp.name);setText($('shopCash'),'You have ₹'+state.cash.toLocaleString('en-IN'));
@@ -28,6 +48,11 @@ function renderShop(){
     const b=document.createElement('button');b.className='btn small';b.textContent=owned?'Owned':maxed?'Maxed':locked?'Locked':it.cost?'Pay ₹'+it.cost:'Free';
     b.disabled=owned||maxed||locked||state.cash<it.cost;b.addEventListener('click',()=>buy(it));row.append(info,b);l.append(row);
   });
+  if(sp.id==='garage'){
+    const row=document.createElement('div');row.className='mission';const info=document.createElement('div'),h=document.createElement('h3'),p=document.createElement('p');
+    h.textContent='Mission board';p.textContent='See your story levels and side jobs.';info.append(h,p);
+    const b=document.createElement('button');b.className='btn small';b.textContent='Open';b.addEventListener('click',()=>{closeScreen('shopScreen');openScreen('board')});row.append(info,b);l.append(row);
+  }
 }
 function buy(it){
   if(state.cash<it.cost)return;

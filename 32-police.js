@@ -20,7 +20,7 @@ function steerTo(u,tx,tz,spd,dt){
   const m=u.m;let df=Math.atan2(tx-m.position.x,tz-m.position.z)-m.rotation.y;df=Math.atan2(Math.sin(df),Math.cos(df));
   m.rotation.y+=clamp(df,-2.4*dt,2.4*dt);
   const s=spd*(1-.55*Math.min(1,Math.abs(df)/1.2));
-  m.position.x+=Math.sin(m.rotation.y)*s*dt;m.position.z+=Math.cos(m.rotation.y)*s*dt;pushOut(m.position,1.6);
+  m.position.x+=Math.sin(m.rotation.y)*s*dt;m.position.z+=Math.cos(m.rotation.y)*s*dt;pushOut(m.position,1.2);
 }
 function chaseJeep(u,tp,dt){
   const m=u.m;u.pt=(u.pt||0)-dt;
