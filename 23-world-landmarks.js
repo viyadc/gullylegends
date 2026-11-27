@@ -13,21 +13,22 @@ function buildTemple(){
   const tip=new THREE.Mesh(new THREE.ConeGeometry(1.2,2.2,10),mat(0xf7b500,{metalness:.6,roughness:.3}));tip.position.set(0,11.3,-56.4);T.add(tip);cyl(.05,.05,2.5,0x6b3a12,0,13,-56.4,T,6);block(1.4,.9,.05,0xe4452b,.7,13.6,-56.4,T);
   block(1.2,.5,1.2,0xd9d2c0,0,.75,-58.4,T);block(.7,1.2,.5,0xf7b500,0,1.6,-58.4,T,{metalness:.6,roughness:.3});block(.4,.4,.4,0xf7b500,0,2.4,-58.4,T);block(1.1,.15,.5,0xff8c1a,0,1.55,-58.1,T);
   [-1.6,1.6].forEach(x=>{cyl(.15,.15,.5,0xf7b500,x,.75,-57.5,T,8);const fl=new THREE.Mesh(new THREE.SphereGeometry(.12,8,8),new THREE.MeshBasicMaterial({color:0xffd166}));fl.position.set(x,1.1,-57.5);T.add(fl)});
-  const tl=new THREE.PointLight(0xffc16a,1.2,14);tl.position.set(0,3,-56);T.add(tl);scene.add(T);
-  addBox(0,-60.7,9,.6);addBox(-4.2,-56.4,.6,8.6);addBox(4.2,-56.4,.6,8.6);addBox(-2.9,-52.3,3,.6);addBox(2.9,-52.3,3,.6);addBox(0,-58.4,1.2,1.2);
-  for(let i=0;i<4;i++)block(14-i*1.5,.4,2,0xd8c9a8,0,-.1-i*.1,-64-i*1.6);
+  const tl=new THREE.PointLight(0xffc16a,1.2,14);tl.position.set(0,3,-56);T.add(tl);T.position.z=-4;scene.add(T);
+  addBox(0,-64.7,9,.6);addBox(-4.2,-60.4,.6,8.6);addBox(4.2,-60.4,.6,8.6);addBox(-2.9,-56.3,3,.6);addBox(2.9,-56.3,3,.6);addBox(0,-62.4,1.2,1.2);
+  for(let i=0;i<3;i++)block(5,.17*(i+1),.95,0xd8c9a8,0,.085*(i+1),-52.6-.9*i);
+  for(let i=0;i<4;i++)block(14-i*1.5,.4,2,0xd8c9a8,0,-.1-i*.1,-70-i*1.6);
 
 }
 function buildGarage(){
   const gar=new THREE.Group();block(7,3.6,.4,0x3b5bdb,0,1.8,-2,gar);block(.4,3.6,4.4,0x3b5bdb,-3.3,1.8,0,gar);block(.4,3.6,4.4,0x3b5bdb,3.3,1.8,0,gar);block(7.4,.3,4.8,0xe4452b,0,3.7,0,gar);cyl(.4,.4,1,0xe4452b,-2.2,.5,-1,gar,12);
   const gs=new THREE.Mesh(new THREE.PlaneGeometry(6,1.3),new THREE.MeshBasicMaterial({map:signTex('UDAAN MOTORS','#1e3a8a','#ffd166','Repairs and Paint')}));gs.position.set(0,4.5,2.35);gar.add(gs);
-  gar.position.set(17.5,0,10);gar.rotation.y=-Math.PI/2;scene.add(gar);addBox(17.5,10,4.8,7.4);
+  gar.position.set(11,0,20);gar.rotation.y=Math.PI;scene.add(gar);addBox(11,20,7.4,4.8);
   const ring=new THREE.Mesh(new THREE.RingGeometry(1.8,2.4,32),new THREE.MeshBasicMaterial({color:0xf7b500,side:THREE.DoubleSide,transparent:true,opacity:.85}));ring.rotation.x=-Math.PI/2;ring.position.set(10,.09,10);scene.add(ring);
   marker.icon=new THREE.Mesh(new THREE.OctahedronGeometry(.6),new THREE.MeshStandardMaterial({color:0xf7b500,emissive:0xd97706,emissiveIntensity:.8}));marker.icon.position.set(10,2.2,10);scene.add(marker.icon);
 
 }
 function buildMarket(){
-  [[25,9,0xe4452b],[40,9,0xf7b500],[20,-9,0x2f9e44],[40,-9,0x8e44ad],[-6,-15,0xf59e0b]].forEach(q=>{const st=new THREE.Group();block(2.8,.9,1.6,0x7c4a1e,0,.45,0,st);block(3.2,.18,2.2,q[2],0,2.5,0,st);[-1.4,1.4].forEach(a=>cyl(.07,.07,2.5,0x444444,a,1.25,.8,st,6));[0xff8c1a,0xe4452b,0x2f9e44].forEach((c,i)=>block(.5,.35,.5,c,-.9+i*.9,1.05,0,st));st.position.set(q[0],0,q[1]);scene.add(st);addBox(q[0],q[1],3.2,2.2,'stall')});
+  [[25,9,0xe4452b],[40,9,0xf7b500],[20,-9,0x2f9e44],[40,-9,0x8e44ad],[-10,-15,0xf59e0b]].forEach(q=>{const st=new THREE.Group();block(2.8,.9,1.6,0x7c4a1e,0,.45,0,st);block(3.2,.18,2.2,q[2],0,2.5,0,st);[-1.4,1.4].forEach(a=>cyl(.07,.07,2.5,0x444444,a,1.25,.8,st,6));[0xff8c1a,0xe4452b,0x2f9e44].forEach((c,i)=>block(.5,.35,.5,c,-.9+i*.9,1.05,0,st));st.position.set(q[0],0,q[1]);scene.add(st);addBox(q[0],q[1],3.2,2.2,'stall')});
   
 
 }
@@ -37,7 +38,7 @@ function buildLamps(){
 
 }
 function templeCheck(){
-  const p=(active?active.mesh:player.mesh).position,inn=Math.abs(p.x)<3.6&&p.z<-52.8&&p.z>-60.2;
+  const p=(active?active.mesh:player.mesh).position,inn=Math.abs(p.x)<3.6&&p.z<-56.8&&p.z>-64.2;
   if(inn!==state.inTemple){state.inTemple=inn;audio.bell()}
 }
 function buildFarLamps(){

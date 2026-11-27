@@ -1,12 +1,12 @@
 'use strict';
 const CHARS=Object.freeze([
   {n:'Meera',x:-12,z:42,c:0x2f9e9e,p:0x1e3a8a,s:0xc58a5a,h:0x1a1a1a},
-  {n:'Iqbal Uncle',x:8,z:13,c:0xd9d4c5,p:0x4b5563,s:0xa8683a,h:0xdddddd},
+  {n:'Iqbal Uncle',x:10,z:14,c:0xd9d4c5,p:0x4b5563,s:0xa8683a,h:0xdddddd},
   {n:'Tara',x:30,z:-12,c:0xe4452b,p:0x7c2d12,s:0xc58a5a,h:0x1a1a1a},
   {n:'Dev',x:12,z:36,c:0x3b82f6,p:0x1f2937,s:0xa8683a,h:0x1a1a1a},
   {n:'Bunty',x:-12,z:-9,c:0x8e44ad,p:0x111827,s:0xd9a577,h:0x3b2412},
   {n:'Raju Bhai',x:-34,z:-8,c:0xf59e0b,p:0x1f2937,s:0xa8683a,h:0x1a1a1a,unlock:2},
-  {n:'Pappan',x:13,z:17,c:0x1d4ed8,p:0x374151,s:0xa8683a,h:0x555555,unlock:4},
+  {n:'Pappan',x:15,z:13,c:0x1d4ed8,p:0x374151,s:0xa8683a,h:0x555555,unlock:4},
   {n:'Kaveri Didi',x:77,z:49,c:0x16a34a,p:0x1f2937,s:0xc58a5a,h:0x1a1a1a,unlock:10},
   {n:'Gopal',x:24,z:150,c:0xe5e7eb,p:0x8b5a2b,s:0xa8683a,h:0xdddddd,unlock:9}
 ]);

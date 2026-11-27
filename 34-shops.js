@@ -1,9 +1,9 @@
 'use strict';
 const SPOTS=Object.freeze([
   {id:'garage',name:'Udaan Motors',x:10,z:10,items:[{id:'paint',label:'Repaint a vehicle',desc:'A fresh colour for the vehicle you are near.',cost:100},{id:'tune',label:'Engine tune-up',desc:'Makes every vehicle a little faster. Up to 2 times.',cost:500,max:2}]},
-  {id:'chai',name:'Chowk Chai Stall',x:-6,z:-12,items:[{id:'chai',label:'Cutting chai and snack',desc:'Hot and tasty. Gives you some health back.',cost:30}]},
+  {id:'chai',name:'Chowk Chai Stall',x:-10,z:-12,items:[{id:'chai',label:'Cutting chai and snack',desc:'Hot and tasty. Gives you some health back.',cost:30}]},
   {id:'clothes',name:'Tara Traders',x:-64,z:-12,items:[{id:'jacket',label:'Blue jacket',desc:'A smart new look for Aru.',cost:250,once:true}]},
-  {id:'temple',name:'Lake Temple',x:0,z:-57,items:[{id:'pray',label:'Offer prayers and a donation',desc:'Feel calm and strong again.',cost:50}]},
+  {id:'temple',name:'Lake Temple',x:0,z:-61,items:[{id:'pray',label:'Offer prayers and a donation',desc:'Feel calm and strong again.',cost:50}]},
   HOSPITAL.spot,FLAT.spot,AMMO_SHOP.spot
 ]);
 const PAINTS=Object.freeze([0xe4452b,0x2563eb,0x16a34a,0x7c3aed,0xf59e0b,0x111827]);

@@ -27,7 +27,7 @@ const MISSIONS=Object.freeze([
     {p:[34,10],t:'Get garlands from the bazaar',w:'Tara',s:'Take these marigold garlands!'},
     {p:[-36,-10],t:'Get lights from the gully',w:'Meera',s:'Here are our old lights. They just need fixing.'},
     {p:[8,13],t:'Fix the lights at the garage',w:'Iqbal Uncle',s:'All fixed. Now go hang them at the lake temple.'},
-    {p:[0,-54],t:'Hang the lights at the lake temple',w:'Everyone',s:'The temple looks magical!'}]},
+    {p:[0,-59],t:'Hang the lights at the lake temple',w:'Everyone',s:'The temple looks magical!'}]},
   {id:8,icon:'🚕',name:'Night Taxi',story:'Zoya, a young reporter, needs a quiet ride. She says she knows a secret about the city plan.',time:110,pay:1200,need:'taxi',stages:[
     {p:[64,-12],t:'Pick up Zoya at Naya Tiffin',w:'Zoya',s:'Quick, Aru! Drive to the lake road. I have news.'},
     {p:[0,-50],t:'Drive Zoya to the lake road',w:'Zoya',s:'The plan was changed last month. The new papers hide our gully!'},
@@ -49,7 +49,7 @@ const MISSIONS=Object.freeze([
   {id:12,icon:'🎉',name:'Nayapur Day',story:'The whole neighbourhood is gathering at Mango Lake. Help with the last tasks and speak up.',time:130,pay:2500,stages:[
     {p:[-24,-12],t:'Pick up sweets for everyone',w:'Sweet seller',s:'Sweets for the whole city!'},
     {p:[30,-12],t:'Collect the bazaar banners',w:'Tara',s:'The banners are ready!'},
-    {p:[0,-54],t:'Set up the stage at Mango Lake',w:'Everyone',s:'The stage is ready!'},
+    {p:[0,-59],t:'Set up the stage at Mango Lake',w:'Everyone',s:'The stage is ready!'},
     {p:[8,13],t:'Bring Iqbal Uncle to the event',w:'Iqbal Uncle',s:'Aru, it is time to speak. Go on.'}]}
 ]);
 const ODDS=Object.freeze([{n:'Tara Traders',p:[-64,-12]},{n:'Gulabi Sweets',p:[-24,-12]},{n:'Chowk Spares',p:[24,-12]},{n:'Naya Tiffin',p:[64,-12]},{n:'the Bus Depot',p:[80,48]},{n:'the Naya Nagar flats',p:[114,-10]},{n:'the Lake Temple',p:[0,-50]},{n:'the farm road',p:[-60,112]},
